@@ -69,7 +69,7 @@
     <div class="container">
       <h3>Check & Connect to MetaMask</h3>
       <div>
-        <button class="btn btn-success" v-on:click="ethPresent">
+        <button class="btn btn-success" v-on:click="walletDetector">
           Click to check connection with MetaMask
         </button>
 
@@ -89,7 +89,7 @@
 
     <!-- Finall transaction -->
     <div class="container">
-      <button class="btn btn-outline-success" v-on:click="finalTransaction">
+      <button class="btn btn-outline-success" v-on:click="performTransaction">
         Click me
       </button>
     </div>
@@ -101,11 +101,14 @@
 <script>
 import Web3 from "web3";
 const axios = require("axios");
-const { config } = require("./config");
-import { Biconomy } from "@biconomy/mexa";
-let contract;
-let web3;
-let biconomy;
+// let web3;
+
+// const { config } = require("./config");
+// import { Biconomy } from "@biconomy/mexa";
+// import Portis from "@portis/web3";
+// let contract;
+// let biconomy;
+// let portis;
 
 export default {
   name: "Web3C",
@@ -131,8 +134,12 @@ export default {
       token:
         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiJhMDc0NzExNS0yZGYzLTQ4NTYtOGU1MS1kZDFkMjdkMTBiOGEiLCJlbWFpbCI6InVkYXkwMnlhZGF2MTE3QGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwaW5fcG9saWN5Ijp7InJlZ2lvbnMiOlt7ImlkIjoiRlJBMSIsImRlc2lyZWRSZXBsaWNhdGlvbkNvdW50IjoxfV0sInZlcnNpb24iOjF9LCJtZmFfZW5hYmxlZCI6ZmFsc2V9LCJhdXRoZW50aWNhdGlvblR5cGUiOiJzY29wZWRLZXkiLCJzY29wZWRLZXlLZXkiOiJiYTEyNzdkYzk0MDMwMThlOTdmYyIsInNjb3BlZEtleVNlY3JldCI6IjgzY2Q1ZGFjMWMwM2E4ZjRiYWJiZGFlZjM0M2I5NmYwY2ExZDNkODg4NTM5NTM0YzY0OTQwYzRlMWRjODU1N2UiLCJpYXQiOjE2MTc0NTY1MDJ9.tSP-3Jr1ocaohHbnIkLJWq9lnZ3DtLn8jyHsAm1JpWs",
       file: null,
-      ipfsHash: "",
+      ipfsHash:
+        "https://ipfs.io/ipfs/QmR1zKD4TmK6fhA67KpyLkgPMgBf3JDkist2LdVzmzGvxu",
       metamask_account: "",
+      smartContractAddress: "0x7e1a31293b444BB16E9f770DA9C71eb2bA7Bb6b3",
+      biconomyKey: "lEmFRpBf8.8fc9d33f-98c2-42f7-bbbf-f121a5952554",
+      chainId: "5",
     };
   },
   methods: {
@@ -223,7 +230,7 @@ export default {
           this.connection_msg_ipfs = "Unable to upload file, retry";
         });
     },
-    ethPresent: async function () {
+    walletDetector: async function () {
       this.metamask_account = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
@@ -238,122 +245,49 @@ export default {
         this.connection_msg_meta = "Unable to find or connect with Metamask";
       }
     },
-    finalTransaction: async function () {
-      biconomy = new Biconomy(window.ethereum, {
-        apiKey: "cPYqR7AP8.51d9ecf9-29e8-4885-8ab2-bd3b2d75724a",
-        debug: true,
-      });
-      await biconomy
-        .onEvent(biconomy.READY, async () => {
-          web3 = new Web3(biconomy);
-          contract = await new web3.eth.Contract(
-            config.contract.abi,
-            config.contract.address
-          );
-          console.log("biconomy ready");
-          console.log(contract);
-          await this.performTransaction();
-        })
-        .onEvent(biconomy.ERROR, (error, message) => {
-          console.log(error);
-          console.log(message);
-        });
-    },
+
     performTransaction: async function () {
-      const domainType = [
-        { name: "name", type: "string" },
-        { name: "version", type: "string" },
-        { name: "chainId", type: "uint256" },
-        { name: "verifyingContract", type: "address" },
-      ];
-      const metaTransactionType = [
-        { name: "nonce", type: "uint256" },
-        { name: "from", type: "address" },
-      ];
-      let domainData = {
-        name: "DeepChainContract",
-        version: "1",
-        chainId: "42",
-        verifyingContract: config.contract.address,
+      if (typeof window.ethereum !== "undefined") {
+        console.log("MetaMask is installed!");
+      }
+      console.log(window.ethereum.isMetaMask);
+
+      let message = {
+        // gas: '40000',
+        // gasPrice: '40000',
+        // gasLimit: '21000',
+        gasPrice: "0x09184e72a000", 
+        gas: "0x2710",
+        value: "0x00",
+        to: this.smartContractAddress,
+        from: window.ethereum.selectedAddress,
+        data: Web3.utils.utf8ToHex(
+          "https://ipfs.io/ipfs/QmR1zKD4TmK6fhA67KpyLkgPMgBf3JDkist2LdVzmzGvxu"
+        ),
       };
-      let message = {};
-      await web3.eth
-        .getTransactionCount("0x11f4d0A3c12e86B4b5F39B213F7E19D048276DAe")
-        .then((value) => {
-          message.nonce = value;
-        });
 
-      // let nonce = await contract.methods
-      //     .nonces(window.ethereum.selectedAddress)
-      //     .call();
+      await window.ethereum
+        .request({
+          method: "eth_sendTransaction",
+          params: [message],
+        })
+        .then((txHash) => console.log(txHash))
+        .catch((error) => console.log(error));
 
-      // message.nonce = parseInt(nonce);
-      // message.nonce = nonce;
-      message.from = window.ethereum.selectedAddress;
-      message.data = this.ipfsHash;
+      // web3 = new Web3("https://rpc.slock.it/goerli");
+      // console.log(web3.currentProvider);
 
-      const dataToSign = JSON.stringify({
-        types: {
-          EIP712Domain: domainType,
-          MetaTransaction: metaTransactionType,
-        },
-        domain: domainData,
-        primaryType: "MetaTransaction",
-        message: message,
-      });
-
-      window.web3.currentProvider.sendAsync(
-        {
-          jsonrpc: "2.0",
-          id: 999999999999,
-          method: "eth_signTypedData_v4",
-          params: [window.ethereum.selectedAddress, dataToSign],
-        },
-        async function (err, result) {
-          if (err) {
-            return console.error(err);
-          }
-          console.log("Signature result from wallet :");
-          console.log(result);
-          if (result && result.result) {
-            const signature = result.result.substring(2);
-            const r = "0x" + signature.substring(0, 64);
-            const s = "0x" + signature.substring(64, 128);
-            const v = parseInt(signature.substring(128, 130), 16);
-            console.log(r, "r");
-            console.log(s, "s");
-            console.log(v, "v");
-            console.log(window.ethereum.address, "userAddress");
-
-            const promiEvent = contract.methods.receiver().send({
-              from: window.ethereum.selectedAddress,
-            });
-            promiEvent
-              .on("transactionHash", (hash) => {
-                console.log(
-                  "Transaction sent successfully. Check Console for Transaction hash"
-                );
-                console.log("Transaction Hash is ", hash);
-              })
-              .once("confirmation", (confirmationNumber, receipt) => {
-                if (receipt.status) {
-                  console.log(
-                    "Transaction processed successfully",
-                    confirmationNumber,
-                    receipt
-                  );
-                } else {
-                  console.log("Transaction Failed");
-                }
-                console.log(receipt);
-              });
-          } else {
-            console.log(
-              "Could not get user signature. Check console logs for error"
-            );
-          }
-        }
-      );
+      // await web3.eth.accounts
+      //   .signTransaction(
+      //     message,
+      //     "0x452c9e812af4df5d8f2ac3937bd2be5fb16b238206453f31b490d057405542e8"
+      //   )
+      //   .then((data) => {
+      //     console.log(data);
+      //     web3.eth
+      //       .sendSignedTransaction(data["rawTransaction"])
+      //       .on("receipt", console.log);
+      //   });
     },
   },
 };
