@@ -1,102 +1,130 @@
 <template>
   <div>
-    <div class="jumbotron">
-      <div class="container">
-        <h3>Hello World</h3>
-      </div>
-    </div>
+    <Jumbotron />
+
     <!-- IPFS -->
-    <div class="container mt-3">
-      <div class="col-sm-8">
-        <h3>Connect to IPFS using Pinata</h3>
-        Enter your API KEYS
-        <input
-          class="form-control"
-          placeholder="xxxxxxxxxxx"
-          v-model="pinata_api_key"
-        />
-        <br />
-        Enter your PINATA SECRET
-        <input
-          type="password"
-          class="form-control"
-          placeholder="xxxxxxxxxxx"
-          v-model="pinata_secret_api_key"
-        />
-        <br />
-        Enter your PINATA Token
-        <input
-          type="password"
-          class="form-control"
-          placeholder="xxxxxxxxxxx"
-          v-model="pinata_secret_token"
-        />
-        <br />
-        <button v-on:click="authToIPFS" class="btn btn-info">
-          Establish Connection With Pinata
-        </button>
-        <br />
-        <br />
-        <div>
-          <div v-if="connect_pin_s" class="alert alert-success" role="alert">
-            {{ connection_msg_pin }}
-          </div>
-          <div v-if="connect_pin_f" class="alert alert-danger" role="alert">
-            {{ connection_msg_pin }}
-          </div>
-        </div>
-        <hr />
-      </div>
-    </div>
 
-    <!-- Upload Files to IPFS -->
     <div class="container">
-      <div class="col-xs-8">
-        <h3>Upload File to IPFS</h3>
-        <input
-          type="file"
-          id="files"
-          ref="files"
-          multiple
-          v-on:change="handleFilesUpload()"
-        />
-        <br />
-        {{ file_selected }}
-        <br />
-        <button v-on:click="uploadFiletoIPFS" class="btn btn-info">
-          Upload Files to IPFS
+      <div class="btn-group" role="group" aria-label="Basic example">
+        <button
+          type="button"
+          v-on:click="toggle_switchx(1)"
+          class="btn btn-info"
+        >
+          Configure IPFS yourself
+        </button>
+        <button
+          type="button"
+          v-on:click="toggle_switchx(2)"
+          class="btn btn-primary"
+        >
+          Enter IPFS CID
         </button>
       </div>
-
       <br />
-
-      <div class="col-xs-8">
-        <div v-if="connect_ipfs_s" class="alert alert-success" role="alert">
-          {{ connection_msg_ipfs }} <br />
-          IPFS hash : {{ ipfsHash }}
-        </div>
-        <div v-if="connect_ipfs_f" class="alert alert-danger" role="alert">
-          {{ connection_msg_ipfs }}
+      <br />
+      <div v-if="!toggle_switch">
+        <div class="row">
+          <div class="col-sm-6">
+            <h3>Connect to IPFS using Pinata</h3>
+            Enter your API KEYS
+            <input
+              class="form-control"
+              placeholder="xxxxxxxxxxx"
+              v-model="pinata_api_key"
+            />
+            <br />
+            Enter your PINATA SECRET
+            <input
+              type="password"
+              class="form-control"
+              placeholder="xxxxxxxxxxx"
+              v-model="pinata_secret_api_key"
+            />
+            <br />
+            Enter your PINATA Token
+            <input
+              type="password"
+              class="form-control"
+              placeholder="xxxxxxxxxxx"
+              v-model="pinata_secret_token"
+            />
+            <br />
+            <button v-on:click="authToIPFS" class="btn btn-info">
+              Establish Connection With Pinata
+            </button>
+            <br />
+            <br />
+            <div>
+              <div
+                v-if="connect_pin_s"
+                class="alert alert-success"
+                role="alert"
+              >
+                {{ connection_msg_pin }}
+              </div>
+              <div v-if="connect_pin_f" class="alert alert-danger" role="alert">
+                {{ connection_msg_pin }}
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <h3>Upload File to IPFS</h3>
+            <input
+              type="file"
+              id="files"
+              ref="files"
+              multiple
+              v-on:change="handleFilesUpload()"
+            />
+            <br />
+            {{ file_selected }}
+            <br />
+            <button v-on:click="uploadFiletoIPFS" class="btn btn-info">
+              Upload Files to IPFS
+            </button>
+            <br />
+            <br />
+            <div v-if="connect_ipfs_s" class="alert alert-success" role="alert">
+              {{ connection_msg_ipfs }} <br />
+            </div>
+            IPFS hash : {{ ipfsHash }}
+            <div v-if="connect_ipfs_f" class="alert alert-danger" role="alert">
+              {{ connection_msg_ipfs }}
+            </div>
+          </div>
         </div>
       </div>
+      <div v-if="toggle_switch">
+        <p class="text-muted">
+          Sample :
+          https://ipfs.io/ipfs/QmR1zKD4TmK6fhA67KpyLkgPMgBf3JDkist2LdVzmzGvxu
+        </p>
+        <h4>Enter IPFS CID :</h4>
+        <input
+          type="text"
+          class="form-control"
+          v-model="ipfsHash"
+          placeholder="https://ipfs.io/ipfs/QmR1zKD4TmK6fhA67KpyLkgPMgBfdfvDkist2LdVzmzGvxu"
+        />
+        <br />
+        <h5>IPFS CID : {{ ipfsHash }}</h5>
+      </div>
     </div>
-
-    <br />
-    <br />
+    <hr />
+    <!-- Upload Files to IPFS -->
     <!-- Connection to metamask -->
     <div class="container">
       <div class="row">
         <div class="col-sm-8">
-          <h3>Check & Connect to MetaMask</h3>
+          <h4>Check & Connect to MetaMask</h4>
           <div>
             <button class="btn btn-success" v-on:click="walletDetector">
               Click to check connection with MetaMask
             </button>
-
             <br />
             <br />
-
-            <div class="container">
+            <div>
               <div
                 v-if="connect_meta_s"
                 class="alert alert-success"
@@ -116,7 +144,6 @@
         </div>
       </div>
     </div>
-    https://ipfs.io/ipfs/QmR1zKD4TmK6fhA67KpyLkgPMgBf3JDkist2LdVzmzGvxu
     <br />
     <br />
     <div class="container">
@@ -124,7 +151,7 @@
         <div class="col-sm-8">
           <h2>Confirm Final Transaction</h2>
           <hr />
-          IPFS Hash
+          IPFS CID
           <input type="text" class="form-control" v-model="ipfsHash" />
           <br />
           Address (send to)
@@ -148,10 +175,14 @@
 
 <script>
 import Web3 from "web3";
+import Jumbotron from "./Jumbotron.vue";
 const axios = require("axios");
 
 export default {
   name: "Web3C",
+  components: {
+    Jumbotron,
+  },
   data() {
     return {
       connect_pin_s: false,
@@ -164,6 +195,7 @@ export default {
       connection_msg_pin: "",
       connection_msg_ipfs: "",
       connection_msg_meta: "",
+      toggle_switch: false,
       pinata_api_key: "ba1277dc9403018e97fc",
       pinata_secret_api_key:
         "83cd5dac1c03a8f4babbdaef343b96f0ca1d3d888539534c64940c4e1dc8557e",
@@ -178,6 +210,13 @@ export default {
     };
   },
   methods: {
+    toggle_switchx: function (i) {
+      if (i == 1) {
+        this.toggle_switch = false;
+      } else {
+        this.toggle_switch = true;
+      }
+    },
     handleFilesUpload() {
       this.files = this.$refs.files.files;
       if (this.$refs.files.files) {
@@ -281,10 +320,8 @@ export default {
     },
 
     performTransaction: async function () {
-      console.log(window.ethereum.selectedAddress);
-
       if (this.ipfsHash == "") {
-        alert("IPFS Hash missing");
+        alert("IPFS CID missing");
         return;
       }
 
