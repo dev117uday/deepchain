@@ -1,7 +1,12 @@
 <template>
-  <div class="container mt-3">
+  <div>
+    <div class="jumbotron">
+      <div class="container">
+        <h3>Hello World</h3>
+      </div>
+    </div>
     <!-- IPFS -->
-    <div>
+    <div class="container mt-3">
       <div class="col-sm-8">
         <h3>Connect to IPFS using Pinata</h3>
         Enter your API KEYS
@@ -27,7 +32,9 @@
           v-model="pinata_secret_token"
         />
         <br />
-        <button v-on:click="authToIPFS" class="btn btn-info">click me</button>
+        <button v-on:click="authToIPFS" class="btn btn-info">
+          Establish Connection With Pinata
+        </button>
         <br />
         <br />
         <div>
@@ -44,35 +51,32 @@
 
     <!-- Upload Files to IPFS -->
     <div class="container">
-      <div class="row">
-        <div class="col-xs-8">
-          <h3>Upload File to IPFS</h3>
-          <input
-            type="file"
-            id="files"
-            ref="files"
-            multiple
-            v-on:change="handleFilesUpload()"
-          />
-          <br />
-          {{ file_selected }}
-          <br />
-          <button v-on:click="uploadFiletoIPFS" class="btn btn-info">
-            Upload Files to IPFS
-          </button>
-        </div>
+      <div class="col-xs-8">
+        <h3>Upload File to IPFS</h3>
+        <input
+          type="file"
+          id="files"
+          ref="files"
+          multiple
+          v-on:change="handleFilesUpload()"
+        />
+        <br />
+        {{ file_selected }}
+        <br />
+        <button v-on:click="uploadFiletoIPFS" class="btn btn-info">
+          Upload Files to IPFS
+        </button>
       </div>
+
       <br />
 
-      <div class="row">
-        <div class="col-xs-8">
-          <div v-if="connect_ipfs_s" class="alert alert-success" role="alert">
-            {{ connection_msg_ipfs }} <br />
-            IPFS hash : {{ ipfsHash }}
-          </div>
-          <div v-if="connect_ipfs_f" class="alert alert-danger" role="alert">
-            {{ connection_msg_ipfs }}
-          </div>
+      <div class="col-xs-8">
+        <div v-if="connect_ipfs_s" class="alert alert-success" role="alert">
+          {{ connection_msg_ipfs }} <br />
+          IPFS hash : {{ ipfsHash }}
+        </div>
+        <div v-if="connect_ipfs_f" class="alert alert-danger" role="alert">
+          {{ connection_msg_ipfs }}
         </div>
       </div>
     </div>
@@ -80,45 +84,62 @@
     <br />
     <br />
     <!-- Connection to metamask -->
-    <div>
-      <div class="col-sm-8">
-        <h3>Check & Connect to MetaMask</h3>
-        <div>
-          <button class="btn btn-success" v-on:click="walletDetector">
-            Click to check connection with MetaMask
-          </button>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8">
+          <h3>Check & Connect to MetaMask</h3>
+          <div>
+            <button class="btn btn-success" v-on:click="walletDetector">
+              Click to check connection with MetaMask
+            </button>
 
-          <br />
-          <br />
+            <br />
+            <br />
 
-          <div class="container">
-            <div v-if="connect_meta_s" class="alert alert-success" role="alert">
-              {{ connection_msg_meta }} <br />
-            </div>
-            <div v-if="connect_meta_f" class="alert alert-danger" role="alert">
-              {{ connection_msg_meta }}
+            <div class="container">
+              <div
+                v-if="connect_meta_s"
+                class="alert alert-success"
+                role="alert"
+              >
+                {{ connection_msg_meta }} <br />
+              </div>
+              <div
+                v-if="connect_meta_f"
+                class="alert alert-danger"
+                role="alert"
+              >
+                {{ connection_msg_meta }}
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    https://ipfs.io/ipfsQmR1zKD4TmK6fhA67KpyLkgPMgBf3JDkist2LdVzmzGvxu
+    https://ipfs.io/ipfs/QmR1zKD4TmK6fhA67KpyLkgPMgBf3JDkist2LdVzmzGvxu
     <br />
     <br />
-    <div class="row">
-      <div class="col-sm-8">
-        <h2>Confirm Final Transaction</h2>
-        <hr />
-        IPFS Hash
-        <input type="text" class="form-control" v-model="ipfsHash" />
-      </div>
-    </div>
-    <br />
-    <!-- Finall transaction -->
     <div class="container">
-      <button class="btn btn-outline-success" v-on:click="performTransaction">
-        Click me
-      </button>
+      <div class="row">
+        <div class="col-sm-8">
+          <h2>Confirm Final Transaction</h2>
+          <hr />
+          IPFS Hash
+          <input type="text" class="form-control" v-model="ipfsHash" />
+          <br />
+          Address (send to)
+          <input type="text" class="form-control" v-model="addressTo" />
+          <br />
+          <h6>Address (sending from) : {{ addressFrom }}</h6>
+        </div>
+      </div>
+      <br />
+      <!-- Finall transaction -->
+      <div class="container">
+        <button class="btn btn-outline-danger" v-on:click="performTransaction">
+          Stamp the data file on blockchain
+        </button>
+      </div>
     </div>
     <br />
     <br />
@@ -128,13 +149,6 @@
 <script>
 import Web3 from "web3";
 const axios = require("axios");
-// let web3;
-// const { config } = require("./config");
-// import { Biconomy } from "@biconomy/mexa";
-// import Portis from "@portis/web3";
-// let contract;
-// let biconomy;
-// let portis;
 
 export default {
   name: "Web3C",
@@ -159,6 +173,7 @@ export default {
       ipfsHash: "",
       metamask_account: "",
       addressTo: "0x7e1a31293b444BB16E9f770DA9C71eb2bA7Bb6b3",
+      addressFrom: "-",
       file_selected: "",
     };
   },
@@ -230,7 +245,7 @@ export default {
           },
         })
         .then((response) => {
-          this.ipfsHash = "https://ipfs.io/ipfs" + response.data.IpfsHash;
+          this.ipfsHash = "https://ipfs.io/ipfs/" + response.data.IpfsHash;
           this.connect_ipfs_s = true;
           this.connect_ipfs_f = false;
           this.connection_msg_ipfs = "File Uploaded Success !";
@@ -262,24 +277,23 @@ export default {
         this.connect_meta_f = true;
         this.connection_msg_meta = "Unable to find or connect with Metamask";
       }
+      this.addressFrom = window.ethereum.selectedAddress;
     },
 
     performTransaction: async function () {
+      console.log(window.ethereum.selectedAddress);
 
-      console.log(Web3.utils.utf8ToHex("20.000001000"))
+      if (this.ipfsHash == "") {
+        alert("IPFS Hash missing");
+        return;
+      }
 
       let message = {
-        // gas: '40000',
-        // gasPrice: '40000',
-        // gasLimit: '21000',
-        gasPrice: Web3.utils.utf8ToHex("0.00000100"),
-        gas: Web3.utils.utf8ToHex("0.00000100"),
-        value: "0x00",
-        to: this.addressTo,
+        gas: "6000",
+        gasPrice: "400",
         from: window.ethereum.selectedAddress,
-        data: Web3.utils.utf8ToHex(
-          "https://ipfs.io/ipfs/QmR1zKD4TmK6fhA67KpyLkgPMgBf3JDkist2LdVzmzGvxu"
-        ),
+        to: this.addressTo,
+        data: Web3.utils.utf8ToHex(this.ipfsHash),
       };
 
       await window.ethereum
@@ -289,21 +303,6 @@ export default {
         })
         .then((txHash) => console.log(txHash))
         .catch((error) => console.log(error));
-
-      // web3 = new Web3("https://rpc.slock.it/goerli");
-      // console.log(web3.currentProvider);
-
-      // await web3.eth.accounts
-      //   .signTransaction(
-      //     message,
-      //     "0x452c9e812af4df5d8f2ac3937bd2be5fb16b238206453f31b490d057405542e8"
-      //   )
-      //   .then((data) => {
-      //     console.log(data);
-      //     web3.eth
-      //       .sendSignedTransaction(data["rawTransaction"])
-      //       .on("receipt", console.log);
-      //   });
     },
   },
 };
