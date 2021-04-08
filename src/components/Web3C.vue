@@ -2,7 +2,7 @@
   <div class="container mt-3">
     <!-- IPFS -->
     <div>
-      <div>
+      <div class="col-sm-8">
         <h3>Connect to IPFS using Pinata</h3>
         Enter your API KEYS
         <input
@@ -13,9 +13,18 @@
         <br />
         Enter your PINATA SECRET
         <input
+          type="password"
           class="form-control"
           placeholder="xxxxxxxxxxx"
           v-model="pinata_secret_api_key"
+        />
+        <br />
+        Enter your PINATA Token
+        <input
+          type="password"
+          class="form-control"
+          placeholder="xxxxxxxxxxx"
+          v-model="pinata_secret_token"
         />
         <br />
         <button v-on:click="authToIPFS" class="btn btn-info">click me</button>
@@ -29,29 +38,34 @@
             {{ connection_msg_pin }}
           </div>
         </div>
+        <hr />
       </div>
     </div>
 
-    <hr />
-
     <!-- Upload Files to IPFS -->
-    <div class="row">
-      <div class="col-sm-6">
-        <h3>Upload File to IPFS</h3>
-        <input
-          type="file"
-          id="files"
-          ref="files"
-          multiple
-          v-on:change="handleFilesUpload()"
-        />
-        <br /><br />
-        <button v-on:click="uploadFiletoIPFS" class="btn btn-info">
-          Upload Files to IPFS
-        </button>
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-8">
+          <h3>Upload File to IPFS</h3>
+          <input
+            type="file"
+            id="files"
+            ref="files"
+            multiple
+            v-on:change="handleFilesUpload()"
+          />
+          <br />
+          {{ file_selected }}
+          <br />
+          <button v-on:click="uploadFiletoIPFS" class="btn btn-info">
+            Upload Files to IPFS
+          </button>
+        </div>
       </div>
-      <div>
-        <div>
+      <br />
+
+      <div class="row">
+        <div class="col-xs-8">
           <div v-if="connect_ipfs_s" class="alert alert-success" role="alert">
             {{ connection_msg_ipfs }} <br />
             IPFS hash : {{ ipfsHash }}
@@ -63,38 +77,51 @@
       </div>
     </div>
 
-    <hr />
-
+    <br />
+    <br />
     <!-- Connection to metamask -->
-    <div class="container">
-      <h3>Check & Connect to MetaMask</h3>
-      <div>
-        <button class="btn btn-success" v-on:click="walletDetector">
-          Click to check connection with MetaMask
-        </button>
+    <div>
+      <div class="col-sm-8">
+        <h3>Check & Connect to MetaMask</h3>
+        <div>
+          <button class="btn btn-success" v-on:click="walletDetector">
+            Click to check connection with MetaMask
+          </button>
 
-        <br />
-        <br />
+          <br />
+          <br />
 
-        <div class="container">
-          <div v-if="connect_meta_s" class="alert alert-success" role="alert">
-            {{ connection_msg_meta }} <br />
-          </div>
-          <div v-if="connect_meta_f" class="alert alert-danger" role="alert">
-            {{ connection_msg_meta }}
+          <div class="container">
+            <div v-if="connect_meta_s" class="alert alert-success" role="alert">
+              {{ connection_msg_meta }} <br />
+            </div>
+            <div v-if="connect_meta_f" class="alert alert-danger" role="alert">
+              {{ connection_msg_meta }}
+            </div>
           </div>
         </div>
       </div>
     </div>
-
+    https://ipfs.io/ipfsQmR1zKD4TmK6fhA67KpyLkgPMgBf3JDkist2LdVzmzGvxu
+    <br />
+    <br />
+    <div class="row">
+      <div class="col-sm-8">
+        <h2>Confirm Final Transaction</h2>
+        <hr />
+        IPFS Hash
+        <input type="text" class="form-control" v-model="ipfsHash" />
+      </div>
+    </div>
+    <br />
     <!-- Finall transaction -->
     <div class="container">
       <button class="btn btn-outline-success" v-on:click="performTransaction">
         Click me
       </button>
     </div>
-
-    <hr />
+    <br />
+    <br />
   </div>
 </template>
 
@@ -102,7 +129,6 @@
 import Web3 from "web3";
 const axios = require("axios");
 // let web3;
-
 // const { config } = require("./config");
 // import { Biconomy } from "@biconomy/mexa";
 // import Portis from "@portis/web3";
@@ -114,10 +140,6 @@ export default {
   name: "Web3C",
   data() {
     return {
-      version: "",
-      node_link: "https://goerli.infura.io/v3/ad26acf72e0945038f8d9fb33112f8e8",
-      connect_node_s: false,
-      connect_node_f: false,
       connect_pin_s: false,
       connect_pin_f: false,
       connect_ipfs_s: false,
@@ -131,38 +153,23 @@ export default {
       pinata_api_key: "ba1277dc9403018e97fc",
       pinata_secret_api_key:
         "83cd5dac1c03a8f4babbdaef343b96f0ca1d3d888539534c64940c4e1dc8557e",
-      token:
+      pinata_secret_token:
         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiJhMDc0NzExNS0yZGYzLTQ4NTYtOGU1MS1kZDFkMjdkMTBiOGEiLCJlbWFpbCI6InVkYXkwMnlhZGF2MTE3QGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwaW5fcG9saWN5Ijp7InJlZ2lvbnMiOlt7ImlkIjoiRlJBMSIsImRlc2lyZWRSZXBsaWNhdGlvbkNvdW50IjoxfV0sInZlcnNpb24iOjF9LCJtZmFfZW5hYmxlZCI6ZmFsc2V9LCJhdXRoZW50aWNhdGlvblR5cGUiOiJzY29wZWRLZXkiLCJzY29wZWRLZXlLZXkiOiJiYTEyNzdkYzk0MDMwMThlOTdmYyIsInNjb3BlZEtleVNlY3JldCI6IjgzY2Q1ZGFjMWMwM2E4ZjRiYWJiZGFlZjM0M2I5NmYwY2ExZDNkODg4NTM5NTM0YzY0OTQwYzRlMWRjODU1N2UiLCJpYXQiOjE2MTc0NTY1MDJ9.tSP-3Jr1ocaohHbnIkLJWq9lnZ3DtLn8jyHsAm1JpWs",
       file: null,
-      ipfsHash:
-        "https://ipfs.io/ipfs/QmR1zKD4TmK6fhA67KpyLkgPMgBf3JDkist2LdVzmzGvxu",
+      ipfsHash: "",
       metamask_account: "",
-      smartContractAddress: "0x7e1a31293b444BB16E9f770DA9C71eb2bA7Bb6b3",
-      biconomyKey: "lEmFRpBf8.8fc9d33f-98c2-42f7-bbbf-f121a5952554",
-      chainId: "5",
+      addressTo: "0x7e1a31293b444BB16E9f770DA9C71eb2bA7Bb6b3",
+      file_selected: "",
     };
   },
   methods: {
     handleFilesUpload() {
       this.files = this.$refs.files.files;
+      if (this.$refs.files.files) {
+        this.file_selected = "File Selected";
+      }
     },
-    web3init: function () {
-      let web3 = new Web3(this.node_link);
-      this.version = web3.version;
 
-      web3.eth.net
-        .isListening()
-        .then(() => {
-          this.connect_node_s = true;
-          this.connect_node_f = false;
-          this.connection_msg = "Connected to the node !";
-        })
-        .catch(() => {
-          this.connect_node_s = false;
-          this.connect_node_f = true;
-          this.connection_msg = "Unable to connect to the node, please check";
-        });
-    },
     authToIPFS: function () {
       const url = `https://api.pinata.cloud/data/testAuthentication`;
       axios
@@ -170,7 +177,7 @@ export default {
           headers: {
             pinata_api_key: this.pinata_api_key,
             pinata_secret_api_key: this.pinata_secret_api_key,
-            Authorization: `Bearer ${this.token}`,
+            Authorization: `Bearer ${this.pinata_secret_token}`,
           },
         })
         .then(() => {
@@ -197,13 +204,18 @@ export default {
         return 0;
       }
 
+      this.connect_ipfs_s = true;
+      this.connect_ipfs_f = false;
+      this.connection_msg_ipfs = "Please wait, File is being uploaded";
+      this.ipfsHash = "!";
+
       data.append(
         "file",
         this.$refs.files.files[0],
         this.$refs.files.files[0].name
       );
       const metadata = JSON.stringify({
-        name: "testname",
+        name: this.$refs.files.files[0].name,
         keyvalues: {
           exampleKey: "exampleValue",
         },
@@ -218,19 +230,25 @@ export default {
           },
         })
         .then((response) => {
-          this.ipfsHash = response.data.IpfsHash;
+          this.ipfsHash = "https://ipfs.io/ipfs" + response.data.IpfsHash;
           this.connect_ipfs_s = true;
           this.connect_ipfs_f = false;
           this.connection_msg_ipfs = "File Uploaded Success !";
+          this.file_selected = "";
         })
         .catch(function (error) {
           console.log(error);
           this.connect_ipfs_s = false;
           this.connect_ipfs_f = true;
+          this.file_selected = "";
           this.connection_msg_ipfs = "Unable to upload file, retry";
         });
     },
     walletDetector: async function () {
+      if (typeof window.ethereum !== "undefined") {
+        console.log("MetaMask is installed!");
+      }
+      console.log(window.ethereum.isMetaMask);
       this.metamask_account = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
@@ -247,19 +265,17 @@ export default {
     },
 
     performTransaction: async function () {
-      if (typeof window.ethereum !== "undefined") {
-        console.log("MetaMask is installed!");
-      }
-      console.log(window.ethereum.isMetaMask);
+
+      console.log(Web3.utils.utf8ToHex("20.000001000"))
 
       let message = {
         // gas: '40000',
         // gasPrice: '40000',
         // gasLimit: '21000',
-        gasPrice: "0x09184e72a000", 
-        gas: "0x2710",
+        gasPrice: Web3.utils.utf8ToHex("0.00000100"),
+        gas: Web3.utils.utf8ToHex("0.00000100"),
         value: "0x00",
-        to: this.smartContractAddress,
+        to: this.addressTo,
         from: window.ethereum.selectedAddress,
         data: Web3.utils.utf8ToHex(
           "https://ipfs.io/ipfs/QmR1zKD4TmK6fhA67KpyLkgPMgBf3JDkist2LdVzmzGvxu"
