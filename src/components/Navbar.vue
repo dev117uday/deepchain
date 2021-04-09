@@ -1,10 +1,5 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-    <nav class="navbar navbar-dark bg-dark">
-  <a class="navbar-brand" href="#">
-    <img src="@/assets/deepchain.png" width="70" height="70" alt="">
-  </a>
-</nav>
     <a class="navbar-brand" href="#"><h3>DeepChain</h3></a>
     <button
       class="navbar-toggler"
