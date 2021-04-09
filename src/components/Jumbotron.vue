@@ -17,9 +17,7 @@
         <li class="list-item">
           Set Address to send (this is done in-order to perform a transaction)
         </li>
-		<li class="list-item">
-          Approve transaction on MetaMask
-        </li>
+        <li class="list-item">Approve transaction on MetaMask</li>
       </ul>
     </div>
   </div>

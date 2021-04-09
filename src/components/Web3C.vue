@@ -112,7 +112,6 @@
       </div>
     </div>
     <hr />
-    <!-- Upload Files to IPFS -->
     <!-- Connection to metamask -->
     <div class="container">
       <div class="row">
@@ -154,7 +153,7 @@
           IPFS CID
           <input type="text" class="form-control" v-model="ipfsHash" />
           <br />
-          Address (send to)
+          Address (send to) : (set to default address)
           <input type="text" class="form-control" v-model="addressTo" />
           <br />
           <h6>Address (sending from) : {{ addressFrom }}</h6>
@@ -164,8 +163,17 @@
       <!-- Finall transaction -->
       <div class="container">
         <button class="btn btn-outline-danger" v-on:click="performTransaction">
-          Stamp the data file on blockchain
+          Stamp Data File on Blockchain
         </button>
+      </div>
+      <br />
+      <div>
+        <div v-if="connect_final_s" class="alert alert-success" role="alert">
+          {{ connection_msg_final }} <br />
+        </div>
+        <div v-if="connect_final_f" class="alert alert-danger" role="alert">
+          {{ connection_msg_final }}
+        </div>
       </div>
     </div>
     <br />
@@ -189,11 +197,11 @@ export default {
       connect_pin_f: false,
       connect_ipfs_s: false,
       connect_ipfs_f: false,
-      connect_meta_s: false,
-      connect_meta_f: false,
-      connection_msg: "",
+      connect_final_s: false,
+      connect_final_f: false,
       connection_msg_pin: "",
       connection_msg_ipfs: "",
+      connection_msg_final: "",
       connection_msg_meta: "",
       toggle_switch: false,
       pinata_api_key: "ba1277dc9403018e97fc",
@@ -323,6 +331,8 @@ export default {
       if (this.ipfsHash == "") {
         alert("IPFS CID missing");
         return;
+      } else if (this.addressFrom == "-") {
+        alert("Please connect to MetaMask");
       }
 
       let message = {
@@ -338,8 +348,16 @@ export default {
           method: "eth_sendTransaction",
           params: [message],
         })
-        .then((txHash) => console.log(txHash))
-        .catch((error) => console.log(error));
+        .then((txHash) => {
+          this.connect_final_s = true;
+          this.connect_final_f = false;
+          this.connection_msg_final = "txhash : " + txHash;
+        })
+        .catch((error) => {
+          this.connect_final_s = false;
+          this.connect_final_f = true;
+          this.connection_msg_final = error.message;
+        });
     },
   },
 };
