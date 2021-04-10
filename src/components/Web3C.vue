@@ -1,7 +1,5 @@
 <template>
   <div>
-    <Jumbotron />
-
     <!-- IPFS -->
 
     <div class="container">
@@ -185,14 +183,8 @@
 import Web3 from "web3";
 const axios = require("axios");
 
-// componentes
-import Jumbotron from "./Jumbotron.vue";
-
 export default {
   name: "Web3C",
-  components: {
-    Jumbotron,
-  },
   data() {
     return {
       connect_pin_s: false,

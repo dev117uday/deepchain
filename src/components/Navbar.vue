@@ -1,16 +1,63 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-    <a class="navbar-brand" href="#"><h3>DeepChain</h3></a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-toggle="collapse"
-      data-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
+  <nav>
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <div class="nav">
+            <p class="logo">DeepChain</p>
+            <div class="walletConnect">
+              <div class="indicator"></div>
+              <span v-on:click="walletDetector">Connect to wallet</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </nav>
 </template>
+
+<script>
+export default {
+  name: "Navbar",
+};
+</script>
+
+<style lang="scss" scoped>
+.nav {
+  height: 80px;
+  border-bottom: 2px solid #434343;
+  display: flex;
+  justify-content: space-between;
+}
+
+.logo {
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 78px;
+}
+
+.indicator {
+  height: 9px;
+  width: 9px;
+  border-radius: 5px;
+  margin-right: 10px;
+  background-color: red;
+}
+
+.walletConnect {
+  height: 32px;
+  line-height: 32px;
+  padding: 0 14px;
+  border: 1px solid black;
+  border-radius: 16px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  margin-top: 23px;
+  cursor:pointer;
+
+  &:hover{
+    background-color: white;
+  }
+}
+</style>
