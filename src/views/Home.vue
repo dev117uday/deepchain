@@ -24,9 +24,11 @@ export default {
 <style>
 body {
   font-family: "Poppins", sans-serif;
-  background-color: #E1E1E1;
+  background-color: #e1e1e1;
 }
-*{box-sizing: border-box}
+* {
+  box-sizing: border-box;
+}
 .container {
   max-width: 1080px;
 }

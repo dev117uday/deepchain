@@ -54,9 +54,9 @@ export default {
   display: flex;
   align-items: center;
   margin-top: 23px;
-  cursor:pointer;
+  cursor: pointer;
 
-  &:hover{
+  &:hover {
     background-color: white;
   }
 }

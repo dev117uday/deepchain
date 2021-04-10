@@ -55,7 +55,7 @@ export default {
         .to(this.$refs.card3, {})
         .to(this.$refs.card4, {})
         .to(this.$refs.overlay, { opacity: 1 })
-        .to(this.$refs.overlay, { display: "none", delay: 0  });
+        .to(this.$refs.overlay, { display: "none", delay: 0 });
     },
   },
 };
