@@ -1,6 +1,6 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-    <a class="navbar-brand" href="#"><h3>DeepChain</h3></a>
+    <a class="navbar-brand" href="/"><h3>DeepChain</h3></a>
     <button
       class="navbar-toggler"
       type="button"
@@ -36,10 +36,17 @@
         <a class="nav-link disabled" href="#">Disabled</a>
       </li> -->
       </ul>
-      <!-- <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form> -->
+      <form class="form-inline my-2 my-lg-0">
+        <router-link :to="{ name: 'Console' }">
+          <button class="btn btn-info" type="submit">Console</button> &nbsp;
+          &nbsp;</router-link
+        >
+        <router-link :to="{ name: 'About' }">
+          <button class="btn btn-primary" type="submit">
+            Discover
+          </button></router-link
+        >
+      </form>
     </div>
   </nav>
 </template>
