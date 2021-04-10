@@ -199,6 +199,8 @@ export default {
       connect_ipfs_f: false,
       connect_final_s: false,
       connect_final_f: false,
+      connect_meta_s: false,
+      connect_meta_f: false,
       connection_msg_pin: "",
       connection_msg_ipfs: "",
       connection_msg_final: "",
@@ -310,21 +312,23 @@ export default {
       if (typeof window.ethereum !== "undefined") {
         console.log("MetaMask is installed!");
       }
-      console.log(window.ethereum.isMetaMask);
       this.metamask_account = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
+
       try {
+        console.log(window.ethereum.isMetaMask);
+
         this.connect_meta_s = true;
         this.connect_meta_f = false;
         this.connection_msg_meta = "Metamask Available and Connected";
+        this.addressFrom = window.ethereum.selectedAddress;
       } catch (error) {
         console.log("not present", error);
         this.connect_meta_s = false;
         this.connect_meta_f = true;
         this.connection_msg_meta = "Unable to find or connect with Metamask";
       }
-      this.addressFrom = window.ethereum.selectedAddress;
     },
 
     performTransaction: async function () {
