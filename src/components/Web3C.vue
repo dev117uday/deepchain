@@ -183,8 +183,10 @@
 
 <script>
 import Web3 from "web3";
-import Jumbotron from "./Jumbotron.vue";
 const axios = require("axios");
+
+// componentes
+import Jumbotron from "./Jumbotron.vue";
 
 export default {
   name: "Web3C",
