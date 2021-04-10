@@ -7,7 +7,7 @@
             <p class="logo">DeepChain</p>
             <div class="walletConnect">
               <div class="indicator"></div>
-              <span v-on:click="walletDetector">Connect to wallet</span>
+              <span v-on:click="walletDetector">Connect wallet</span>
             </div>
           </div>
         </div>
