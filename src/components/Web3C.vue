@@ -174,8 +174,13 @@
         </div>
       </div>
     </div>
+
     <br />
     <br />
+
+    <!-- <button class="btn btn-success" v-on:click="send_data">
+      Click me click me
+    </button> -->
   </div>
 </template>
 
@@ -211,6 +216,7 @@ export default {
       addressTo: "0x7e1a31293b444BB16E9f770DA9C71eb2bA7Bb6b3",
       addressFrom: "-",
       file_selected: "",
+      txhash: "",
     };
   },
   methods: {
@@ -347,14 +353,44 @@ export default {
           params: [message],
         })
         .then((txHash) => {
+          this.txhash = txHash;
           this.connect_final_s = true;
           this.connect_final_f = false;
           this.connection_msg_final = "txhash : " + txHash;
+          this.send_data();
         })
         .catch((error) => {
           this.connect_final_s = false;
           this.connect_final_f = true;
           this.connection_msg_final = error.message;
+        });
+    },
+    send_data: function () {
+      console.log("click");
+
+      var data = JSON.stringify({
+        ipfs_cid: this.ipfsHash,
+        address_to: this.addressTo,
+        address_from: this.addressTo,
+        txhash: this.txhash,
+      });
+
+      var config = {
+        method: "post",
+        url: "http://127.0.0.1:3000/savetx",
+        headers: {
+          Accept: "application/javascript",
+          "Content-Type": "application/json",
+        },
+        data: data,
+      };
+
+      axios(config)
+        .then(function (response) {
+          console.log(JSON.stringify(response.data));
+        })
+        .catch(function (error) {
+          console.log(error);
         });
     },
   },

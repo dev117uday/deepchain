@@ -10,9 +10,13 @@
   "dependencies": {
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
+<<<<<<< HEAD
     "gsap": "^3.6.1",
     "locomotive-scroll": "^4.1.1",
     "node-sass": "4.14.1",
+=======
+    "fetch": "^1.1.0",
+>>>>>>> fad78d8ba9954f4b8c04e69b75b125a3b9ecbe35
     "register-service-worker": "^1.7.1",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
