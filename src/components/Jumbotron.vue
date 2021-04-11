@@ -23,11 +23,11 @@
         <div class="row">
           <div class="col-6">
             <p class="tagline">
-              <span><span ref="tag1">Put </span></span>
-              <span><span ref="tag2">IPFS </span></span>
-              <span><span ref="tag3">content </span></span>
-              <span><span ref="tag4">on </span></span>
-              <span><span ref="tag5">Ethereum </span></span>
+              <span><span ref="tag1">Fighting </span></span>
+              <span><span ref="tag2">deepfakes </span></span>
+              <span><span ref="tag3">and </span></span>
+              <span><span ref="tag4">misinformation </span></span>
+              <span><span ref="tag5">using </span></span>
               <span><span ref="tag6">blockchain</span></span>
             </p>
           </div>
@@ -76,6 +76,8 @@ export default {
         delay: "-0.2",
         transform: "translateY(0) skewY(0deg)",
         scrollTrigger: this.$refs.info,
+        toggleActions: "play complete reverse reset",
+        start: "center center"
       },
     });
 
