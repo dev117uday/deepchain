@@ -1,54 +1,63 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-    <a class="navbar-brand" href="/"><h3>DeepChain</h3></a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-toggle="collapse"
-      data-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        <!-- <li class="nav-item active">
-        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Dropdown
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Something else here</a>
+  <nav>
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <div class="nav">
+            <p class="logo">DeepChain</p>
+            <div class="walletConnect">
+              <div class="indicator"></div>
+              <span v-on:click="walletDetector">Connect wallet</span>
+            </div>
+          </div>
         </div>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link disabled" href="#">Disabled</a>
-      </li> -->
-      </ul>
-      <form class="form-inline my-2 my-lg-0">
-        <div class="btn-group" role="group" aria-label="Basic example">
-          <router-link :to="{ name: 'Console' }">
-            <button class="btn btn-success" type="submit">Console</button>
-            &nbsp; &nbsp;</router-link
-          >
-          <router-link :to="{ name: 'About' }">
-            <button class="btn btn-primary" type="submit">
-              Discover
-            </button></router-link
-          >
-        </div>
-      </form>
+      </div>
     </div>
   </nav>
 </template>
+
+<script>
+export default {
+  name: "Navbar",
+};
+</script>
+
+<style lang="scss" scoped>
+.nav {
+  height: 80px;
+  border-bottom: 2px solid #434343;
+  display: flex;
+  justify-content: space-between;
+}
+
+.logo {
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 78px;
+}
+
+.indicator {
+  height: 9px;
+  width: 9px;
+  border-radius: 5px;
+  margin-right: 10px;
+  background-color: red;
+}
+
+.walletConnect {
+  height: 32px;
+  line-height: 32px;
+  padding: 0 14px;
+  border: 1px solid black;
+  border-radius: 16px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  margin-top: 23px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: white;
+  }
+}
+</style>

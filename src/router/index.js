@@ -1,21 +1,21 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
-import Main from "../views/Main.vue";
+// import Main from "../views/Main.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "/console",
-    name: "Console",
+    path: "/",
+    name: "Homepage",
     component: Home,
   },
-  {
-    path: "/",
-    name: "Main",
-    component: Main,
-  },
+  // {
+  //   path: "/",
+  //   name: "Main",
+  //   component: Main,
+  // },
   {
     path: "/about",
     name: "About",
@@ -25,7 +25,6 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/Discover.vue"),
   },
-
 ];
 
 const router = new VueRouter({
