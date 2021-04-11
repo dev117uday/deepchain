@@ -19,6 +19,27 @@
 <script>
 export default {
   name: "Navbar",
+  methods : {
+    walletDetector: async function () {
+      if (typeof window.ethereum !== "undefined") {
+        console.log("MetaMask is installed!");
+      }
+      this.metamask_account = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
+
+      try {
+        console.log(window.ethereum.isMetaMask);
+        alert("metamask connected")
+        this.$store.commit("setAccount",`${window.ethereum.selectedAddress}`);
+        
+      } catch (error) {
+        console.log("not present", error);
+        alert("Unable to find or connect with Metamask")
+      }
+    },
+
+  }
 };
 </script>
 
