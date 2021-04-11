@@ -2,263 +2,179 @@
   <div>
     <!-- IPFS -->
 
-    <div class="container-full">
-      <div
-        class="partition left"
-        :class="[toggle_switch ? 'inactive' : 'active']"
-      >
-        <div class="content-container">
-          <div class="row">
-            <div class="col-12">
-              <h2>Configure IPFS yourself</h2>
-            </div>
-            <div class="col-6">
-              <div v-if="!toggle_switch">
-                <h3>Connect to IPFS using Pinata</h3>
-                <form>
-                  <div class="inputContainer">
-                    <input type="text" id="api-keys" v-model="pinata_api_key" />
-                    <label for="api-keys">Enter your API Keys</label>
-                  </div>
+    <div class="split-form">
+      <div class="container">
+        <div
+          class="partition left"
+          :class="[toggle_switch ? 'inactive' : 'active']"
+        >
+          <div class="content-container">
+            <div class="row">
+              <div class="col-12">
+                <h2>Configure IPFS yourself</h2>
+              </div>
+              <div class="col-6">
+                <div v-if="!toggle_switch">
+                  <h3>Connect to IPFS using Pinata</h3>
+                  <form>
+                    <div class="inputContainer">
+                      <input
+                        type="text"
+                        id="api-keys"
+                        v-model="pinata_api_key"
+                      />
+                      <label for="api-keys">Enter your API Keys</label>
+                    </div>
 
-                  <div class="inputContainer">
-                    <input
-                      type="password"
-                      id="pinata-secret-api"
-                      v-model="pinata_secret_api_key"
-                    />
-                    <label for="pinata-secret-api"
-                      >Enter your Pinata Secret</label
+                    <div class="inputContainer">
+                      <input
+                        type="password"
+                        id="pinata-secret-api"
+                        v-model="pinata_secret_api_key"
+                      />
+                      <label for="pinata-secret-api"
+                        >Enter your Pinata Secret</label
+                      >
+                    </div>
+
+                    <div class="inputContainer">
+                      <input
+                        type="password"
+                        id="pinata-secret-token"
+                        v-model="pinata_secret_token"
+                      />
+                      <label for="pinata-secret-token"
+                        >Enter your Pinata Token</label
+                      >
+                    </div>
+
+                    <button v-on:click="authToIPFS" class="btn hollow btn-form">
+                      Connect to Pinata
+                    </button>
+                  </form>
+                  <br />
+                  <br />
+                  <div>
+                    <div
+                      v-if="connect_pin_s"
+                      class="alert alert-success"
+                      role="alert"
                     >
-                  </div>
-
-                  <div class="inputContainer">
-                    <input
-                      type="password"
-                      id="pinata-secret-token"
-                      v-model="pinata_secret_token"
-                    />
-                    <label for="pinata-secret-token"
-                      >Enter your Pinata Token</label
+                      {{ connection_msg_pin }}
+                    </div>
+                    <div
+                      v-if="connect_pin_f"
+                      class="alert alert-danger"
+                      role="alert"
                     >
+                      {{ connection_msg_pin }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div v-if="!toggle_switch">
+                  <h3>Upload File</h3>
+
+                  <div class="uploadSection">
+                    <p>Supports JPG, PNG and MP4 videos.</p>
+                    <div class="drag">
+                      <input
+                        id="upload-file"
+                        type="file"
+                        ref="files"
+                        multiple
+                        v-on:change="handleFilesUpload()"
+                        hidden
+                      />
+                      <p>
+                        Drop your file here or
+                        <label for="upload-file">browse</label>
+                      </p>
+                    </div>
                   </div>
 
-                  <button v-on:click="authToIPFS" class="btn hollow btn-form">
-                    Connect to Pinata
+                  {{ file_selected }}
+
+                  <button
+                    v-on:click="uploadFiletoIPFS"
+                    class="btn hollow btn-form"
+                  >
+                    Upload Files to IPFS
                   </button>
-                </form>
-                <br />
-                <br />
-                <div>
+
+                  <br />
+                  <br />
+
                   <div
-                    v-if="connect_pin_s"
+                    v-if="connect_ipfs_s"
                     class="alert alert-success"
                     role="alert"
                   >
-                    {{ connection_msg_pin }}
+                    {{ connection_msg_ipfs }} <br />
                   </div>
+                  IPFS hash : {{ ipfsHash }}
                   <div
-                    v-if="connect_pin_f"
+                    v-if="connect_ipfs_f"
                     class="alert alert-danger"
                     role="alert"
                   >
-                    {{ connection_msg_pin }}
+                    {{ connection_msg_ipfs }}
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="col-6">
-              <div v-if="!toggle_switch">
-                <h3>Upload File</h3>
 
-                <div class="uploadSection">
-                  <p>Supports JPG, PNG and MP4 videos.</p>
-                  <div class="drag">
+              <div class="col-12">
+                <div v-if="toggle_switch">
+                  <button
+                    type="button"
+                    v-on:click="toggle_switchx(1)"
+                    class="btn"
+                  >
+                    View the section
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="partition right"
+          :class="[toggle_switch ? 'active' : 'inactive']"
+        >
+          <div class="content-container">
+            <div class="row">
+              <div class="col-8">
+                <h2>Enter IPFS CID</h2>
+                <div v-if="!toggle_switch">
+                  <button
+                    type="button"
+                    v-on:click="toggle_switchx(2)"
+                    class="btn"
+                  >
+                    View the section
+                  </button>
+                </div>
+
+                <div v-if="toggle_switch">
+                  <div class="inputContainer">
                     <input
-                      id="upload-file"
-                      type="file"
-                      ref="files"
-                      multiple
-                      v-on:change="handleFilesUpload()"
-                      hidden
+                      type="text"
+                      id="ipfs-cid"
+                      v-model="ipfsHash"
+                      placeholder="https://ipfs.io/ipfs/QmR1zKD4TmK6fhA67KpyLkgPMgBfdfvDkist2LdVzmzGvxu"
                     />
-                    <p>
-                      Drop your file here or
-                      <label for="upload-file">browse</label>
-                    </p>
+                    <label for="ipfs-cid">Enter IPFS CID</label>
                   </div>
                 </div>
-
-                {{ file_selected }}
-
-                <button
-                  v-on:click="uploadFiletoIPFS"
-                  class="btn hollow btn-form"
-                >
-                  Upload Files to IPFS
-                </button>
-
-                <br />
-                <br />
-
-                <div
-                  v-if="connect_ipfs_s"
-                  class="alert alert-success"
-                  role="alert"
-                >
-                  {{ connection_msg_ipfs }} <br />
-                </div>
-                IPFS hash : {{ ipfsHash }}
-                <div
-                  v-if="connect_ipfs_f"
-                  class="alert alert-danger"
-                  role="alert"
-                >
-                  {{ connection_msg_ipfs }}
-                </div>
-              </div>
-            </div>
-
-            <div class="col-12">
-              <div v-if="toggle_switch">
-                <button
-                  type="button"
-                  v-on:click="toggle_switchx(1)"
-                  class="btn"
-                >
-                  View the section
-                </button>
               </div>
             </div>
           </div>
         </div>
       </div>
-
-      <div
-        class="partition right"
-        :class="[toggle_switch ? 'active' : 'inactive']"
-      >
-        <div class="content-container">
-          <div class="row">
-            <div class="col-8">
-              <h2>Enter IPFS CID</h2>
-              <div v-if="!toggle_switch">
-                <button
-                  type="button"
-                  v-on:click="toggle_switchx(2)"
-                  class="btn"
-                >
-                  View the section
-                </button>
-              </div>
-
-              <div v-if="toggle_switch">
-                <div class="inputContainer">
-                  <input
-                    type="text"
-                    id="ipfs-cid"
-                    v-model="ipfsHash"
-                    placeholder="https://ipfs.io/ipfs/QmR1zKD4TmK6fhA67KpyLkgPMgBfdfvDkist2LdVzmzGvxu"
-                  />
-                  <label for="ipfs-cid">Enter IPFS CID</label>
-                </div>
-
-                <!-- <h5>IPFS CID : {{ ipfsHash }}</h5> -->
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- <div v-if="!toggle_switch">
-        <div class="row">
-          <div class="col-sm-6">
-            <h3>Connect to IPFS using Pinata</h3>
-            Enter your API KEYS
-            <input
-              class="form-control"
-              placeholder="xxxxxxxxxxx"
-              v-model="pinata_api_key"
-            />
-            <br />
-            Enter your PINATA SECRET
-            <input
-              type="password"
-              class="form-control"
-              placeholder="xxxxxxxxxxx"
-              v-model="pinata_secret_api_key"
-            />
-            <br />
-            Enter your PINATA Token
-            <input
-              type="password"
-              class="form-control"
-              placeholder="xxxxxxxxxxx"
-              v-model="pinata_secret_token"
-            />
-            <br />
-            <button v-on:click="authToIPFS" class="btn btn-info">
-              Establish Connection With Pinata
-            </button>
-            <br />
-            <br />
-            <div>
-              <div
-                v-if="connect_pin_s"
-                class="alert alert-success"
-                role="alert"
-              >
-                {{ connection_msg_pin }}
-              </div>
-              <div v-if="connect_pin_f" class="alert alert-danger" role="alert">
-                {{ connection_msg_pin }}
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6">
-            <h3>Upload File to IPFS</h3>
-            <input
-              type="file"
-              id="files"
-              ref="files"
-              multiple
-              v-on:change="handleFilesUpload()"
-            />
-            <br />
-            {{ file_selected }}
-            <br />
-            <button v-on:click="uploadFiletoIPFS" class="btn btn-info">
-              Upload Files to IPFS
-            </button>
-            <br />
-            <br />
-            <div v-if="connect_ipfs_s" class="alert alert-success" role="alert">
-              {{ connection_msg_ipfs }} <br />
-            </div>
-            IPFS hash : {{ ipfsHash }}
-            <div v-if="connect_ipfs_f" class="alert alert-danger" role="alert">
-              {{ connection_msg_ipfs }}
-            </div>
-          </div>
-        </div>
-      </div>
-      <div v-if="toggle_switch">
-        <p class="text-muted">
-          Sample :
-          https://ipfs.io/ipfs/QmR1zKD4TmK6fhA67KpyLkgPMgBf3JDkist2LdVzmzGvxu
-        </p>
-        <h4>Enter IPFS CID :</h4>
-        <input
-          type="text"
-          class="form-control"
-          v-model="ipfsHash"
-          placeholder="https://ipfs.io/ipfs/QmR1zKD4TmK6fhA67KpyLkgPMgBfdfvDkist2LdVzmzGvxu"
-        />
-        <br />
-        <h5>IPFS CID : {{ ipfsHash }}</h5>
-      </div> -->
     </div>
-    <hr />
+
     <!-- Connection to metamask -->
     <div class="container">
       <div class="row">
@@ -539,7 +455,7 @@ export default {
 </script>
 
 <style lang="scss">
-$transition: 0.4s ease;
+$transition: 0.4s cubic-bezier(0.36, 0.33, 0, 1);
 $theme: #ff4d00;
 $theme2: #fc5811;
 $dark: #14121f;
@@ -561,6 +477,8 @@ $inputBgColor: #fff;
   float: left;
   margin-bottom: 100px;
   transition: $transition;
+  position: relative;
+  z-index: 1;
 
   .content-container {
     max-width: 885px;
@@ -581,6 +499,7 @@ $inputBgColor: #fff;
 
   &.left {
     background-color: $bgColor;
+    padding-left: 0;
 
     h2,
     h3 {
@@ -590,6 +509,7 @@ $inputBgColor: #fff;
 
   &.right {
     background-color: #14121f;
+    padding-right: 0;
 
     h2,
     h3 {
@@ -601,16 +521,20 @@ $inputBgColor: #fff;
     width: 70%;
   }
 
-  &.inactive:hover {
-    width: 32%;
-    transition: $transition;
+  // For inactive partition
+  &.inactive {
+    // hover effect to give the peek effect.
+    &:hover {
+      width: 32%;
+      transition: $transition;
 
-    &.right {
-      margin-left: -2%;
-    }
+      &.right {
+        margin-left: -2%;
+      }
 
-    &.left ~ .partition.right {
-      width: 68%;
+      &.left ~ .partition.right {
+        width: 68%;
+      }
     }
   }
 }
@@ -768,6 +692,22 @@ $inputBgColor: #fff;
       text-decoration: underline;
       cursor: pointer;
     }
+  }
+}
+
+.split-form {
+  background-color: #14121f;
+  height: 600px;
+  position: relative;
+
+  &:after {
+    content: "";
+    position: absolute;
+    width: 50%;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background-color: $bgColor;
   }
 }
 </style>

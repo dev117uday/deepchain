@@ -39,7 +39,8 @@ export default {
 
 <style lang="scss" scoped>
 $theme: #ff4d00;
-$dark: #363636;
+// $dark: #363636;
+$dark: #14121f;
 
 // rewriting and editing bootstrap classes
 .jumbotron {
@@ -85,7 +86,7 @@ $dark: #363636;
 }
 
 .steps {
-  margin: 70px 0;
+  margin: 70px 0 0;
   color: $dark;
 
   h2 {
