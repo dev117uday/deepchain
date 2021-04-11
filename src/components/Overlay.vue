@@ -69,7 +69,7 @@ export default {
   top: 0;
   left: 0;
   background-color: #14121f;
-  z-index: 10;
+  z-index: 11;
   color: #fefff5;
 
   .content-container {

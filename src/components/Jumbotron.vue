@@ -9,7 +9,7 @@
             <div class="btn btn-filled">Perfrom transaction</div>
             <div class="btn btn-hollow">Know more</div>
           </div>
-          <img src="@/assets/chain-logo.png" class="logo" />
+          <img src="@/assets/chain-new.png" class="logo" />
         </div>
       </div>
       <div class="parallax-image-container">
@@ -18,11 +18,18 @@
     </div>
 
     <!-- info section -->
-    <div class="info">
+    <div class="info" ref="info">
       <div class="container">
         <div class="row">
           <div class="col-6">
-            <p class="tagline">Put IPFS content on Ethereum blockchain</p>
+            <p class="tagline">
+              <span><span ref="tag1">Put </span></span>
+              <span><span ref="tag2">IPFS </span></span>
+              <span><span ref="tag3">content </span></span>
+              <span><span ref="tag4">on </span></span>
+              <span><span ref="tag5">Ethereum </span></span>
+              <span><span ref="tag6">blockchain</span></span>
+            </p>
           </div>
 
           <div class="col-6">
@@ -55,8 +62,30 @@
 </template>
 
 <script>
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+gsap.registerPlugin(ScrollTrigger);
+
 export default {
-  name: "Jumbotron",
+  name: "Jumbotron" /* I don't even know what jumbotron means */,
+
+  mounted() {
+    var tl = gsap.timeline({
+      defaults: {
+        duration: 0.3,
+        delay: "-0.2",
+        transform: "translateY(0) skewY(0deg)",
+        scrollTrigger: this.$refs.info,
+      },
+    });
+
+    tl.to(this.$refs.tag1, { delay: 0 })
+      .to(this.$refs.tag2, { duration: 0.45 })
+      .to(this.$refs.tag3, {})
+      .to(this.$refs.tag4, {})
+      .to(this.$refs.tag5, {})
+      .to(this.$refs.tag6, {});
+  },
 };
 </script>
 
@@ -148,6 +177,16 @@ $theme: #ff5000;
   font-size: 40px;
   font-weight: 500;
   max-width: 750px;
+
+  & > span {
+    overflow: hidden;
+    display: inline-flex;
+    margin-right: 12px;
+
+    span {
+      transform: translateY(-100%) skewY(-7deg);
+    }
+  }
 }
 .logo {
   position: absolute;
@@ -155,7 +194,7 @@ $theme: #ff5000;
   top: 0;
   bottom: 0;
   margin: auto;
-  width: 320px;
+  width: 360px;
 }
 
 .info {

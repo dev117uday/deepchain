@@ -2,11 +2,12 @@
   <div>
     <!-- IPFS -->
 
-    <div class="split-form">
+    <div class="split-form" ref="splitForm">
       <div class="container">
         <div
           class="partition left"
           :class="[toggle_switch ? 'inactive' : 'active']"
+          ref="leftPartition"
         >
           <div class="content-container">
             <div class="row">
@@ -142,6 +143,7 @@
         <div
           class="partition right"
           :class="[toggle_switch ? 'active' : 'inactive']"
+          ref="rightPartition"
         >
           <div class="content-container">
             <div class="row">
@@ -151,7 +153,7 @@
                   <button
                     type="button"
                     v-on:click="toggle_switchx(2)"
-                    class="btn"
+                    class="btn blackText"
                   >
                     View the section
                   </button>
@@ -175,34 +177,37 @@
       </div>
     </div>
 
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-8">
-          <h2>Confirm Final Transaction</h2>
-          <hr />
-          IPFS CID
-          <input type="text" class="form-control" v-model="ipfsHash" />
-          <br />
-          Address (send to) : (set to default address)
-          <input type="text" class="form-control" v-model="addressTo" />
-          <br />
-          <h6>Address (sending from) : {{ getAddress }}</h6>
-        </div>
-      </div>
-      <br />
-      <!-- Finall transaction -->
+    <div class="final-transaction">
       <div class="container">
-        <button class="btn btn-outline-danger" v-on:click="performTransaction">
-          Stamp Data File on Blockchain
-        </button>
-      </div>
-      <br />
-      <div>
-        <div v-if="connect_final_s" class="alert alert-success" role="alert">
-          {{ connection_msg_final }} <br />
+        <div class="row">
+          <div class="col-12"><h3>Confirm Final Transaction</h3></div>
+          <div class="col-6">
+            <div class="inputContainer">
+              <input type="text" id="ipfs-cid" v-model="ipfsHash" />
+              <label for="ipfs-cid">IPFS CID</label>
+            </div>
+            <p class="message">Address (sending from) : {{ getAddress }}</p>
+            <button class="btn blackText" v-on:click="performTransaction">
+              Stamp Data File on Blockchain
+            </button>
+          </div>
+          <div class="col-6">
+            <div class="inputContainer">
+              <input type="text" id="send-to" v-model="addressTo" />
+              <label for="send-to"
+                >Address (send to) : (set to default address)</label
+              >
+            </div>
+          </div>
         </div>
-        <div v-if="connect_final_f" class="alert alert-danger" role="alert">
-          {{ connection_msg_final }}
+        <br /><br />
+        <div>
+          <div v-if="connect_final_s" class="alert alert-success" role="alert">
+            {{ connection_msg_final }} <br />
+          </div>
+          <div v-if="connect_final_f" class="alert alert-danger" role="alert">
+            {{ connection_msg_final }}
+          </div>
         </div>
       </div>
     </div>
@@ -212,6 +217,9 @@
 <script>
 import Web3 from "web3";
 const axios = require("axios");
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+gsap.registerPlugin(ScrollTrigger);
 
 export default {
   name: "Web3C",
@@ -403,6 +411,27 @@ export default {
       return this.$store.state.account;
     },
   },
+  // mounted() {
+  //   var tl2 = gsap.timeline({
+  //     duration: 0.3,
+  //     scrollTrigger: {
+  //       trigger: this.$refs.splitForm,
+  //       toggleActions: "play complete reverse reset",
+  //       start: "top bottom",
+  //       end: "top 100px",
+  //     },
+  //   });
+
+  //   tl2
+  //     .fromTo(this.$refs.rightPartition, { width: "65%" }, { width: "70%" })
+  //     .fromTo(
+  //       this.$refs.leftPartition,
+  //       { width: "35%" },
+  //       {
+  //         width: "30%"
+  //       }
+  //     );
+  // },
 };
 </script>
 
@@ -462,6 +491,7 @@ $rightTextColor: $dark;
 
   &.left {
     background-color: $leftBgColor;
+    // background-color: red;
     padding-left: 0;
 
     h2,
@@ -472,6 +502,7 @@ $rightTextColor: $dark;
 
   &.right {
     background-color: $rightBgColor;
+    // background-color: blue;
     padding-right: 0;
 
     h2,
@@ -592,13 +623,15 @@ $rightTextColor: $dark;
     border: 1.5px solid $theme;
   }
 
+  &.blackText {
+    &:hover {
+      color: $dark;
+    }
+  }
+
   &.hollow {
     background-color: transparent;
     color: white;
-
-    &.blackText {
-      color: $dark;
-    }
 
     &:hover {
       background-color: $theme;
@@ -677,5 +710,16 @@ $rightTextColor: $dark;
     height: 100%;
     background-color: $leftBgColor;
   }
+}
+
+.final-transaction {
+  label {
+    color: $dark !important;
+  }
+}
+
+.message {
+  font-size: 12px;
+  margin-top: 26px;
 }
 </style>
