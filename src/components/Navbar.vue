@@ -37,15 +37,17 @@
       </li> -->
       </ul>
       <form class="form-inline my-2 my-lg-0">
-        <router-link :to="{ name: 'Console' }">
-          <button class="btn btn-info" type="submit">Console</button> &nbsp;
-          &nbsp;</router-link
-        >
-        <router-link :to="{ name: 'About' }">
-          <button class="btn btn-primary" type="submit">
-            Discover
-          </button></router-link
-        >
+        <div class="btn-group" role="group" aria-label="Basic example">
+          <router-link :to="{ name: 'Console' }">
+            <button class="btn btn-success" type="submit">Console</button>
+            &nbsp; &nbsp;</router-link
+          >
+          <router-link :to="{ name: 'About' }">
+            <button class="btn btn-primary" type="submit">
+              Discover
+            </button></router-link
+          >
+        </div>
       </form>
     </div>
   </nav>
