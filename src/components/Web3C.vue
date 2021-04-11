@@ -456,17 +456,28 @@ export default {
 
 <style lang="scss">
 $transition: 0.4s cubic-bezier(0.36, 0.33, 0, 1);
-$theme: #ff4d00;
-$theme2: #fc5811;
-$dark: #14121f;
-$light: #eedfd2;
+// $theme: #ff4d00;
+// $theme: #fc5811;
+// $dark: #14121f;
+// $light: #eedfd2;
 $inputBg: rgba(249, 249, 254, 0.5);
 
+$dark: #231f20;
+// $dark: #14121f;
+$light: #fefefe;
+$light2: #efefef;
+$theme: #ff5000;
+
 // leftside
+$leftBgColor:  $dark;
 $bgColor: #252734;
 $textColor: #f9f9fa;
 // $inputBgColor: rgba(228, 228, 228, 0.929);
 $inputBgColor: #fff;
+
+// right side
+$rightBgColor: $light2;
+$rightTextColor: $dark;
 
 .partition {
   width: 30%;
@@ -498,7 +509,7 @@ $inputBgColor: #fff;
   }
 
   &.left {
-    background-color: $bgColor;
+    background-color: $leftBgColor;
     padding-left: 0;
 
     h2,
@@ -508,12 +519,16 @@ $inputBgColor: #fff;
   }
 
   &.right {
-    background-color: #14121f;
+    background-color: $rightBgColor;
     padding-right: 0;
 
     h2,
     h3 {
-      color: #fefff5;
+      color: $rightTextColor;
+    }
+
+    label{
+      color: $rightTextColor !important;
     }
   }
 
@@ -614,15 +629,15 @@ $inputBgColor: #fff;
 .btn {
   display: inline-flex;
   padding: 7px 14px;
-  background-color: $theme2;
+  background-color: $theme;
   color: white;
   font-size: 15px;
-  border: 1.5px solid $theme2;
+  border: 1.5px solid $theme;
 
   &:hover {
     background-color: transparent;
     color: white;
-    border: 1.5px solid $theme2;
+    border: 1.5px solid $theme;
   }
 
   &.hollow {
@@ -634,7 +649,7 @@ $inputBgColor: #fff;
     }
 
     &:hover {
-      background-color: $theme2;
+      background-color: $theme;
       color: white;
     }
   }
@@ -688,7 +703,7 @@ $inputBgColor: #fff;
     margin: 0;
 
     label {
-      color: $theme2;
+      color: $theme;
       text-decoration: underline;
       cursor: pointer;
     }
@@ -696,7 +711,8 @@ $inputBgColor: #fff;
 }
 
 .split-form {
-  background-color: #14121f;
+  // background-color: #8b87a7;
+  background-color: $rightBgColor;
   height: 600px;
   position: relative;
 
@@ -707,7 +723,7 @@ $inputBgColor: #fff;
     left: 0;
     top: 0;
     height: 100%;
-    background-color: $bgColor;
+    background-color: $leftBgColor;
   }
 }
 </style>

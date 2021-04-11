@@ -24,9 +24,9 @@ export default {
 <style>
 body {
   font-family: "Poppins", sans-serif;
-  background-color: #e1e1e1;
-  background-size: 10%;
-  background-attachment: fixed;
+  /* background-color: #e1e1e1; */
+  /* background-size: 10%; */
+  /* background-attachment: fixed; */
 }
 * {
   box-sizing: border-box;

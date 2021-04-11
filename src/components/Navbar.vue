@@ -23,11 +23,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$dark: #231f20;
+$light: #fefefe;
+$light2: #efefef;
+$theme: #ff5000;
+
 .nav {
   height: 80px;
-  border-bottom: 2px solid #434343;
+  border-bottom: 1px solid $light;
   display: flex;
   justify-content: space-between;
+  position: relative;
+  z-index: 10;
+  color: $light;
 }
 
 .logo {
@@ -48,16 +56,18 @@ export default {
   height: 32px;
   line-height: 32px;
   padding: 0 14px;
-  border: 1px solid black;
+  border: 1px solid $light;
   border-radius: 16px;
   font-size: 12px;
   display: flex;
   align-items: center;
   margin-top: 23px;
   cursor: pointer;
+  color: $light;
 
   &:hover {
     background-color: white;
+    color: $dark;
   }
 }
 </style>

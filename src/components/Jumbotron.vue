@@ -1,32 +1,55 @@
 <template>
-  <div class="jumbotron">
-    <div class="container">
-      <div class="hero" style="position: relative">
-        <h2 class="title">Project DeepChain</h2>
-        <p class="tagline">TimeStamp IPFS content on Ethereum blockchain</p>
-
-        <img src="@/assets/chain-logo.png" class="logo" />
+  <div>
+    <!-- hero section -->
+    <div class="dark-section">
+      <div class="container">
+        <div class="hero" style="position: relative">
+          <h2 class="title">Project DeepChain</h2>
+          <div class="btn-container">
+            <div class="btn btn-filled">Perfrom transaction</div>
+            <div class="btn btn-hollow">Know more</div>
+          </div>
+          <img src="@/assets/chain-logo.png" class="logo" />
+        </div>
       </div>
-
-      <div class="info">
-        Fighting DeepFakes and Mis-Information on the Internet is hard, Project
-        DeepChain purpose this idea to timestamp content on blockchain,
-        providing an unalterable proof of information This unalterable
-        information can then be shared with on social media. Deepchain also
-        helps you sign documents, contracts etc.
+      <div class="parallax-image-container">
+        <img src="@/assets/bgImg.png" class="parallax-img" />
       </div>
+    </div>
 
-      <section class="steps">
-        <h2>Steps to perform transaction</h2>
-        <ul>
-          <li>Setup Pinata or Provide IPFS CID</li>
-          <li>Connect this app with MetaMask</li>
-          <li>
-            Set Address to send (this is done in-order to perform a transaction)
-          </li>
-          <li>Approve transaction on MetaMask</li>
-        </ul>
-      </section>
+    <!-- info section -->
+    <div class="info">
+      <div class="container">
+        <div class="row">
+          <div class="col-6">
+            <p class="tagline">Put IPFS content on Ethereum blockchain</p>
+          </div>
+
+          <div class="col-6">
+            <p>
+              Fighting DeepFakes and Mis-Information on the Internet is hard,
+              Project DeepChain purpose this idea to timestamp content on
+              blockchain, providing an unalterable proof of information.
+              <br /><br />
+              This unalterable information can then be shared with on social
+              media. Deepchain also helps you sign documents, contracts etc.
+            </p>
+
+            <section class="steps">
+              <h2>Steps to perform transaction</h2>
+              <ul>
+                <li>Setup Pinata or Provide IPFS CID</li>
+                <li>Connect this app with MetaMask</li>
+                <li>
+                  Set Address to send (this is done in-order to perform a
+                  transaction)
+                </li>
+                <li>Approve transaction on MetaMask</li>
+              </ul>
+            </section>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -38,29 +61,87 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$theme: #ff4d00;
-// $dark: #363636;
-$dark: #14121f;
+// $theme: #ff4d00;
+// // $dark: #363636;
+// $dark: #14121f;
 
-// rewriting and editing bootstrap classes
-.jumbotron {
-  background-color: transparent;
-  padding-top: 0px;
+$dark: #231f20;
+// $dark: #14121f;
+$light: #fefefe;
+$light2: #efefef;
+$theme: #ff5000;
+
+.dark-section {
+  background-color: $dark;
+
+  .parallax-image-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0.07;
+    // z-index: -1;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
 }
-
-// style
 .hero {
-  height: 500px;
+  height: 660px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   position: relative;
+  margin-top: -80px;
+  padding-top: 40px;
+  z-index: 1;
 }
+
+.btn {
+  padding: 10px 20px;
+  border-radius: 4px;
+  display: inline-flex;
+  border: 1.5px solid $theme;
+
+  &-container {
+    display: flex;
+    margin-top: 22px;
+  }
+
+  &:not(:last-child) {
+    margin-right: 20px;
+  }
+
+  &-filled {
+    background-color: $theme;
+    color: $light;
+
+    &:hover {
+      background-color: #d64501;
+    }
+  }
+
+  &-hollow {
+    background-color: transparent;
+    color: $light;
+    border-color: $light;
+
+    &:hover {
+      background-color: #d64501;
+      color: $light;
+    }
+  }
+}
+
 .title {
   font-size: 80px;
   font-weight: 700;
-  color: $theme;
+  color: $light;
   text-transform: uppercase;
+  max-width: 550px;
 }
 .tagline {
   color: $dark;
@@ -78,15 +159,12 @@ $dark: #14121f;
 }
 
 .info {
-  padding: 70px 0;
-  border-top: 2px solid $dark;
-  border-bottom: 2px solid $dark;
-  font-size: 19px;
-  color: $dark;
+  padding: 130px 0;
+  font-size: 17px;
 }
 
 .steps {
-  margin: 70px 0 0;
+  margin: 40px 0 0;
   color: $dark;
 
   h2 {
@@ -101,6 +179,7 @@ $dark: #14121f;
     li {
       list-style-type: none;
       font-size: 17px;
+      margin-bottom: 16px;
     }
   }
 }
