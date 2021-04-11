@@ -175,38 +175,6 @@
       </div>
     </div>
 
-    <!-- Connection to metamask -->
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-8">
-          <h4>Check &amp; Connect to MetaMask</h4>
-          <div>
-            <button class="btn btn-success" >
-              Click to check connection with MetaMask
-            </button>
-            <br />
-            <br />
-            <div>
-              <div
-                v-if="connect_meta_s"
-                class="alert alert-success"
-                role="alert"
-              >
-                {{ connection_msg_meta }} <br />
-              </div>
-              <div
-                v-if="connect_meta_f"
-                class="alert alert-danger"
-                role="alert"
-              >
-                {{ connection_msg_meta }}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <div class="container">
       <div class="row">
         <div class="col-sm-8">
@@ -365,29 +333,6 @@ export default {
           this.connection_msg_ipfs = "Unable to upload file, retry";
         });
     },
-    // walletDetector: async function () {
-    //   if (typeof window.ethereum !== "undefined") {
-    //     console.log("MetaMask is installed!");
-    //   }
-    //   this.metamask_account = await window.ethereum.request({
-    //     method: "eth_requestAccounts",
-    //   });
-
-    //   try {
-    //     console.log(window.ethereum.isMetaMask);
-
-    //     this.connect_meta_s = true;
-    //     this.connect_meta_f = false;
-    //     this.connection_msg_meta = "Metamask Available and Connected";
-    //     this.addressFrom = window.ethereum.selectedAddress;
-    //   } catch (error) {
-    //     console.log("not present", error);
-    //     this.connect_meta_s = false;
-    //     this.connect_meta_f = true;
-    //     this.connection_msg_meta = "Unable to find or connect with Metamask";
-    //   }
-    // },
-
     performTransaction: async function () {
       if (this.ipfsHash == "") {
         alert("IPFS CID missing");
@@ -396,7 +341,7 @@ export default {
         alert("Please connect to MetaMask");
       }
 
-      console.log(this.$store.state.account)
+      console.log(this.$store.state.account);
 
       let message = {
         gas: "6000",
@@ -453,11 +398,11 @@ export default {
         });
     },
   },
-  computed : {
-    getAddress : function(){
-      return this.$store.state.account
-    }
-  }
+  computed: {
+    getAddress: function () {
+      return this.$store.state.account;
+    },
+  },
 };
 </script>
 
@@ -476,7 +421,7 @@ $light2: #efefef;
 $theme: #ff5000;
 
 // leftside
-$leftBgColor:  $dark;
+$leftBgColor: $dark;
 $bgColor: #252734;
 $textColor: #f9f9fa;
 // $inputBgColor: rgba(228, 228, 228, 0.929);
@@ -534,7 +479,7 @@ $rightTextColor: $dark;
       color: $rightTextColor;
     }
 
-    label{
+    label {
       color: $rightTextColor !important;
     }
   }

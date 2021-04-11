@@ -5,17 +5,17 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    account : ""
+    account: "",
   },
-  getters : {
-    account : state => {
-      return state.account
-    }
+  getters: {
+    account: (state) => {
+      return state.account;
+    },
   },
   mutations: {
-    setAccount : (state,val ) => {
-      state.account = val
-    }
+    setAccount: (state, val) => {
+      state.account = val;
+    },
   },
   actions: {},
   modules: {},
