@@ -77,9 +77,9 @@ $dark: #363636;
 }
 
 .info {
-  padding: 50px 0;
-  // border-top: 2px solid $dark;
-  // border-bottom: 2px solid $dark;
+  padding: 70px 0;
+  border-top: 2px solid $dark;
+  border-bottom: 2px solid $dark;
   font-size: 19px;
   color: $dark;
 }
