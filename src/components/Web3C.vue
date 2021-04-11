@@ -1,140 +1,225 @@
 <template>
-  <div class="container mt-3">
+  <div>
     <!-- IPFS -->
-    <div>
-      <div class="col-sm-8">
-        <h3>Connect to IPFS using Pinata</h3>
-        Enter your API KEYS
-        <input
-          class="form-control"
-          placeholder="xxxxxxxxxxx"
-          v-model="pinata_api_key"
-        />
-        <br />
-        Enter your PINATA SECRET
-        <input
-          type="password"
-          class="form-control"
-          placeholder="xxxxxxxxxxx"
-          v-model="pinata_secret_api_key"
-        />
-        <br />
-        Enter your PINATA Token
-        <input
-          type="password"
-          class="form-control"
-          placeholder="xxxxxxxxxxx"
-          v-model="pinata_secret_token"
-        />
-        <br />
-        <button v-on:click="authToIPFS" class="btn btn-info">click me</button>
-        <br />
-        <br />
-        <div>
-          <div v-if="connect_pin_s" class="alert alert-success" role="alert">
-            {{ connection_msg_pin }}
-          </div>
-          <div v-if="connect_pin_f" class="alert alert-danger" role="alert">
-            {{ connection_msg_pin }}
-          </div>
-        </div>
-        <hr />
-      </div>
-    </div>
 
-    <!-- Upload Files to IPFS -->
-    <div class="container">
-      <div class="row">
-        <div class="col-xs-8">
-          <h3>Upload File to IPFS</h3>
-          <input
-            type="file"
-            id="files"
-            ref="files"
-            multiple
-            v-on:change="handleFilesUpload()"
-          />
-          <br />
-          {{ file_selected }}
-          <br />
-          <button v-on:click="uploadFiletoIPFS" class="btn btn-info">
-            Upload Files to IPFS
-          </button>
-        </div>
-      </div>
-      <br />
+    <div class="split-form" ref="splitForm">
+      <div class="container">
+        <div
+          class="partition left"
+          :class="[toggle_switch ? 'inactive' : 'active']"
+          ref="leftPartition"
+        >
+          <div class="content-container">
+            <div class="row">
+              <div class="col-12">
+                <h2>Configure IPFS yourself</h2>
+              </div>
+              <div class="col-6">
+                <div v-if="!toggle_switch">
+                  <h3>Connect to IPFS using Pinata</h3>
+                  <form>
+                    <div class="inputContainer">
+                      <input
+                        type="text"
+                        id="api-keys"
+                        v-model="pinata_api_key"
+                      />
+                      <label for="api-keys">Enter your API Keys</label>
+                    </div>
 
-      <div class="row">
-        <div class="col-xs-8">
-          <div v-if="connect_ipfs_s" class="alert alert-success" role="alert">
-            {{ connection_msg_ipfs }} <br />
-            IPFS hash : {{ ipfsHash }}
-          </div>
-          <div v-if="connect_ipfs_f" class="alert alert-danger" role="alert">
-            {{ connection_msg_ipfs }}
-          </div>
-        </div>
-      </div>
-    </div>
+                    <div class="inputContainer">
+                      <input
+                        type="password"
+                        id="pinata-secret-api"
+                        v-model="pinata_secret_api_key"
+                      />
+                      <label for="pinata-secret-api"
+                        >Enter your Pinata Secret</label
+                      >
+                    </div>
 
-    <br />
-    <br />
-    <!-- Connection to metamask -->
-    <div>
-      <div class="col-sm-8">
-        <h3>Check & Connect to MetaMask</h3>
-        <div>
-          <button class="btn btn-success" v-on:click="walletDetector">
-            Click to check connection with MetaMask
-          </button>
+                    <div class="inputContainer">
+                      <input
+                        type="password"
+                        id="pinata-secret-token"
+                        v-model="pinata_secret_token"
+                      />
+                      <label for="pinata-secret-token"
+                        >Enter your Pinata Token</label
+                      >
+                    </div>
 
-          <br />
-          <br />
+                    <button v-on:click="authToIPFS" class="btn hollow btn-form">
+                      Connect to Pinata
+                    </button>
+                  </form>
+                  <br />
+                  <br />
+                  <div>
+                    <div
+                      v-if="connect_pin_s"
+                      class="alert alert-success"
+                      role="alert"
+                    >
+                      {{ connection_msg_pin }}
+                    </div>
+                    <div
+                      v-if="connect_pin_f"
+                      class="alert alert-danger"
+                      role="alert"
+                    >
+                      {{ connection_msg_pin }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div v-if="!toggle_switch">
+                  <h3>Upload File</h3>
 
-          <div class="container">
-            <div v-if="connect_meta_s" class="alert alert-success" role="alert">
-              {{ connection_msg_meta }} <br />
+                  <div class="uploadSection">
+                    <p>Supports JPG, PNG and MP4 videos.</p>
+                    <div class="drag">
+                      <input
+                        id="upload-file"
+                        type="file"
+                        ref="files"
+                        multiple
+                        v-on:change="handleFilesUpload()"
+                        hidden
+                      />
+                      <p>
+                        Drop your file here or
+                        <label for="upload-file">browse</label>
+                      </p>
+                    </div>
+                  </div>
+
+                  {{ file_selected }}
+
+                  <button
+                    v-on:click="uploadFiletoIPFS"
+                    class="btn hollow btn-form"
+                  >
+                    Upload Files to IPFS
+                  </button>
+
+                  <br />
+                  <br />
+
+                  <div
+                    v-if="connect_ipfs_s"
+                    class="alert alert-success"
+                    role="alert"
+                  >
+                    {{ connection_msg_ipfs }} <br />
+                  </div>
+                  IPFS hash : {{ ipfsHash }}
+                  <div
+                    v-if="connect_ipfs_f"
+                    class="alert alert-danger"
+                    role="alert"
+                  >
+                    {{ connection_msg_ipfs }}
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <div v-if="toggle_switch">
+                  <button
+                    type="button"
+                    v-on:click="toggle_switchx(1)"
+                    class="btn"
+                  >
+                    View the section
+                  </button>
+                </div>
+              </div>
             </div>
-            <div v-if="connect_meta_f" class="alert alert-danger" role="alert">
-              {{ connection_msg_meta }}
+          </div>
+        </div>
+
+        <div
+          class="partition right"
+          :class="[toggle_switch ? 'active' : 'inactive']"
+          ref="rightPartition"
+        >
+          <div class="content-container">
+            <div class="row">
+              <div class="col-8">
+                <h2>Enter IPFS CID</h2>
+                <div v-if="!toggle_switch">
+                  <button
+                    type="button"
+                    v-on:click="toggle_switchx(2)"
+                    class="btn blackText"
+                  >
+                    View the section
+                  </button>
+                </div>
+
+                <div v-if="toggle_switch">
+                  <div class="inputContainer">
+                    <input
+                      type="text"
+                      id="ipfs-cid"
+                      v-model="ipfsHash"
+                      placeholder="https://ipfs.io/ipfs/QmR1zKD4TmK6fhA67KpyLkgPMgBfdfvDkist2LdVzmzGvxu"
+                    />
+                    <label for="ipfs-cid">Enter IPFS CID</label>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    https://ipfs.io/ipfsQmR1zKD4TmK6fhA67KpyLkgPMgBf3JDkist2LdVzmzGvxu
-    <br />
-    <br />
-    <div class="row">
-      <div class="col-sm-8">
-        <h2>Confirm Final Transaction</h2>
-        <hr />
-        IPFS Hash
-        <input type="text" class="form-control" v-model="ipfsHash" />
+
+    <div class="final-transaction">
+      <div class="container">
+        <div class="row">
+          <div class="col-12"><h3>Confirm Final Transaction</h3></div>
+          <div class="col-6">
+            <div class="inputContainer">
+              <input type="text" id="ipfs-cid" v-model="ipfsHash" />
+              <label for="ipfs-cid">IPFS CID</label>
+            </div>
+            <p class="message">Address (sending from) : {{ getAddress }}</p>
+            <button class="btn blackText" v-on:click="performTransaction">
+              Stamp Data File on Blockchain
+            </button>
+          </div>
+          <div class="col-6">
+            <div class="inputContainer">
+              <input type="text" id="send-to" v-model="addressTo" />
+              <label for="send-to"
+                >Address (send to) : (set to default address)</label
+              >
+            </div>
+          </div>
+        </div>
+        <br /><br />
+        <div>
+          <div v-if="connect_final_s" class="alert alert-success" role="alert">
+            {{ connection_msg_final }} <br />
+          </div>
+          <div v-if="connect_final_f" class="alert alert-danger" role="alert">
+            {{ connection_msg_final }}
+          </div>
+        </div>
       </div>
     </div>
-    <br />
-    <!-- Finall transaction -->
-    <div class="container">
-      <button class="btn btn-outline-success" v-on:click="performTransaction">
-        Click me
-      </button>
-    </div>
-    <br />
-    <br />
   </div>
 </template>
 
 <script>
 import Web3 from "web3";
 const axios = require("axios");
-// let web3;
-// const { config } = require("./config");
-// import { Biconomy } from "@biconomy/mexa";
-// import Portis from "@portis/web3";
-// let contract;
-// let biconomy;
-// let portis;
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+gsap.registerPlugin(ScrollTrigger);
 
 export default {
   name: "Web3C",
@@ -144,12 +229,15 @@ export default {
       connect_pin_f: false,
       connect_ipfs_s: false,
       connect_ipfs_f: false,
+      connect_final_s: false,
+      connect_final_f: false,
       connect_meta_s: false,
       connect_meta_f: false,
-      connection_msg: "",
       connection_msg_pin: "",
       connection_msg_ipfs: "",
+      connection_msg_final: "",
       connection_msg_meta: "",
+      toggle_switch: true,
       pinata_api_key: "ba1277dc9403018e97fc",
       pinata_secret_api_key:
         "83cd5dac1c03a8f4babbdaef343b96f0ca1d3d888539534c64940c4e1dc8557e",
@@ -159,10 +247,19 @@ export default {
       ipfsHash: "",
       metamask_account: "",
       addressTo: "0x7e1a31293b444BB16E9f770DA9C71eb2bA7Bb6b3",
+      addressFrom: "-",
       file_selected: "",
+      txhash: "",
     };
   },
   methods: {
+    toggle_switchx: function (i) {
+      if (i == 1) {
+        this.toggle_switch = false;
+      } else {
+        this.toggle_switch = true;
+      }
+    },
     handleFilesUpload() {
       this.files = this.$refs.files.files;
       if (this.$refs.files.files) {
@@ -230,7 +327,7 @@ export default {
           },
         })
         .then((response) => {
-          this.ipfsHash = "https://ipfs.io/ipfs" + response.data.IpfsHash;
+          this.ipfsHash = "https://ipfs.io/ipfs/" + response.data.IpfsHash;
           this.connect_ipfs_s = true;
           this.connect_ipfs_f = false;
           this.connection_msg_ipfs = "File Uploaded Success !";
@@ -244,42 +341,22 @@ export default {
           this.connection_msg_ipfs = "Unable to upload file, retry";
         });
     },
-    walletDetector: async function () {
-      if (typeof window.ethereum !== "undefined") {
-        console.log("MetaMask is installed!");
-      }
-      console.log(window.ethereum.isMetaMask);
-      this.metamask_account = await window.ethereum.request({
-        method: "eth_requestAccounts",
-      });
-      try {
-        this.connect_meta_s = true;
-        this.connect_meta_f = false;
-        this.connection_msg_meta = "Metamask Available and Connected";
-      } catch (error) {
-        console.log("not present", error);
-        this.connect_meta_s = false;
-        this.connect_meta_f = true;
-        this.connection_msg_meta = "Unable to find or connect with Metamask";
-      }
-    },
-
     performTransaction: async function () {
+      if (this.ipfsHash == "") {
+        alert("IPFS CID missing");
+        return;
+      } else if (this.addressFrom == "-") {
+        alert("Please connect to MetaMask");
+      }
 
-      console.log(Web3.utils.utf8ToHex("20.000001000"))
+      console.log(this.$store.state.account);
 
       let message = {
-        // gas: '40000',
-        // gasPrice: '40000',
-        // gasLimit: '21000',
-        gasPrice: Web3.utils.utf8ToHex("0.00000100"),
-        gas: Web3.utils.utf8ToHex("0.00000100"),
-        value: "0x00",
-        to: this.addressTo,
+        gas: "6000",
+        gasPrice: "400",
         from: window.ethereum.selectedAddress,
-        data: Web3.utils.utf8ToHex(
-          "https://ipfs.io/ipfs/QmR1zKD4TmK6fhA67KpyLkgPMgBf3JDkist2LdVzmzGvxu"
-        ),
+        to: this.addressTo,
+        data: Web3.utils.utf8ToHex(this.ipfsHash),
       };
 
       await window.ethereum
@@ -287,24 +364,362 @@ export default {
           method: "eth_sendTransaction",
           params: [message],
         })
-        .then((txHash) => console.log(txHash))
-        .catch((error) => console.log(error));
+        .then((txHash) => {
+          this.txhash = txHash;
+          this.connect_final_s = true;
+          this.connect_final_f = false;
+          this.connection_msg_final = "txhash : " + txHash;
+          this.send_data();
+        })
+        .catch((error) => {
+          this.connect_final_s = false;
+          this.connect_final_f = true;
+          this.connection_msg_final = error.message;
+        });
+    },
+    send_data: function () {
+      console.log("click");
 
-      // web3 = new Web3("https://rpc.slock.it/goerli");
-      // console.log(web3.currentProvider);
+      var data = JSON.stringify({
+        ipfs_cid: this.ipfsHash,
+        address_to: this.addressTo,
+        address_from: this.addressTo,
+        txhash: this.txhash,
+      });
 
-      // await web3.eth.accounts
-      //   .signTransaction(
-      //     message,
-      //     "0x452c9e812af4df5d8f2ac3937bd2be5fb16b238206453f31b490d057405542e8"
-      //   )
-      //   .then((data) => {
-      //     console.log(data);
-      //     web3.eth
-      //       .sendSignedTransaction(data["rawTransaction"])
-      //       .on("receipt", console.log);
-      //   });
+      var config = {
+        method: "post",
+        url: "http://127.0.0.1:3000/savetx",
+        headers: {
+          Accept: "application/javascript",
+          "Content-Type": "application/json",
+        },
+        data: data,
+      };
+
+      axios(config)
+        .then(function (response) {
+          console.log(JSON.stringify(response.data));
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     },
   },
+  computed: {
+    getAddress: function () {
+      return this.$store.state.account;
+    },
+  },
+  // mounted() {
+  //   var tl2 = gsap.timeline({
+  //     duration: 0.3,
+  //     scrollTrigger: {
+  //       trigger: this.$refs.splitForm,
+  //       toggleActions: "play complete reverse reset",
+  //       start: "top bottom",
+  //       end: "top 100px",
+  //     },
+  //   });
+
+  //   tl2
+  //     .fromTo(this.$refs.rightPartition, { width: "65%" }, { width: "70%" })
+  //     .fromTo(
+  //       this.$refs.leftPartition,
+  //       { width: "35%" },
+  //       {
+  //         width: "30%"
+  //       }
+  //     );
+  // },
 };
 </script>
+
+<style lang="scss">
+$transition: 0.4s cubic-bezier(0.36, 0.33, 0, 1);
+// $theme: #ff4d00;
+// $theme: #fc5811;
+// $dark: #14121f;
+// $light: #eedfd2;
+$inputBg: rgba(249, 249, 254, 0.5);
+
+$dark: #231f20;
+// $dark: #14121f;
+$light: #fefefe;
+$light2: #efefef;
+$theme: #ff5000;
+
+// leftside
+$leftBgColor: $dark;
+$bgColor: #252734;
+$textColor: #f9f9fa;
+// $inputBgColor: rgba(228, 228, 228, 0.929);
+$inputBgColor: #fff;
+
+// right side
+$rightBgColor: $light2;
+$rightTextColor: $dark;
+
+.partition {
+  width: 30%;
+  height: 600px;
+  display: inline-flex;
+  flex-direction: column;
+  padding: 60px 40px;
+  float: left;
+  margin-bottom: 100px;
+  transition: $transition;
+  position: relative;
+  z-index: 1;
+
+  .content-container {
+    max-width: 885px;
+  }
+
+  h2 {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 50px;
+  }
+
+  h3 {
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 50px;
+  }
+
+  &.left {
+    background-color: $leftBgColor;
+    // background-color: red;
+    padding-left: 0;
+
+    h2,
+    h3 {
+      color: $textColor;
+    }
+  }
+
+  &.right {
+    background-color: $rightBgColor;
+    // background-color: blue;
+    padding-right: 0;
+
+    h2,
+    h3 {
+      color: $rightTextColor;
+    }
+
+    label {
+      color: $rightTextColor !important;
+    }
+  }
+
+  &.active {
+    width: 70%;
+  }
+
+  // For inactive partition
+  &.inactive {
+    // hover effect to give the peek effect.
+    &:hover {
+      width: 32%;
+      transition: $transition;
+
+      &.right {
+        margin-left: -2%;
+      }
+
+      &.left ~ .partition.right {
+        width: 68%;
+      }
+    }
+  }
+}
+
+// form elements
+.inputContainer {
+  position: relative;
+  margin-top: 45px;
+  top: 0;
+  left: 0;
+
+  input,
+  textarea {
+    height: 40px;
+    border-radius: 3px;
+    background-color: $inputBgColor;
+    border: 0.5px solid $dark;
+    padding: 0 15px;
+    line-height: 50px;
+    font-size: 14px;
+    font-weight: 400;
+    width: 100%;
+    color: black;
+
+    &:active,
+    &:focus {
+      border: 1.5px solid $dark;
+      outline: none;
+    }
+
+    &:active,
+    &:focus,
+    &:valid {
+      & ~ label {
+        color: $textColor;
+        font-size: 14px;
+        font-weight: 500;
+        top: -34px;
+        left: 0px;
+        transition: all 0.3s ease;
+      }
+    }
+
+    &:disabled {
+      pointer-events: none;
+      user-select: none;
+      background-color: transparent;
+      position: relative;
+
+      & ~ label {
+        height: 48px;
+        margin-top: 1px;
+        line-height: 48px;
+        background-color: #f1f1f1;
+      }
+    }
+  }
+
+  label {
+    font-size: 16px;
+    font-weight: 600;
+    color: $dark;
+    height: 40px;
+    line-height: 40px;
+    position: absolute;
+    left: 15px;
+    top: 0;
+    z-index: 1;
+    transition: all 0.3s ease;
+    // user-select: none;
+    // pointer-events: none;
+  }
+}
+
+// button
+
+.btn {
+  display: inline-flex;
+  padding: 7px 14px;
+  background-color: $theme;
+  color: white;
+  font-size: 15px;
+  border: 1.5px solid $theme;
+
+  &:hover {
+    background-color: transparent;
+    color: white;
+    border: 1.5px solid $theme;
+  }
+
+  &.blackText {
+    &:hover {
+      color: $dark;
+    }
+  }
+
+  &.hollow {
+    background-color: transparent;
+    color: white;
+
+    &:hover {
+      background-color: $theme;
+      color: white;
+    }
+  }
+
+  &.btn-form {
+    margin-top: 30px;
+  }
+}
+
+// image upload section
+
+.uploadSection {
+  padding: 26px 30px 30px;
+  background-color: $inputBgColor;
+  border: 0.5px solid $dark;
+  border-radius: 3px;
+  height: 100%;
+
+  h2 {
+    color: $dark;
+    text-align: left;
+    font-weight: 700;
+    margin: 0 0 5px 0;
+    font-size: 17px;
+  }
+
+  p {
+    font-size: 12px;
+    font-weight: 600;
+    color: $dark;
+    text-align: left;
+    margin: 0 0 20px 0;
+  }
+}
+
+.drag {
+  // height: 140px;
+  border-radius: 6px;
+  border: 1px dashed #c7cbd9;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 42px 0;
+
+  p {
+    text-align: center;
+    color: $dark;
+    font-size: 14px;
+    font-weight: 400;
+    margin: 0;
+
+    label {
+      color: $theme;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+}
+
+.split-form {
+  // background-color: #8b87a7;
+  background-color: $rightBgColor;
+  height: 600px;
+  position: relative;
+
+  &:after {
+    content: "";
+    position: absolute;
+    width: 50%;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background-color: $leftBgColor;
+  }
+}
+
+.final-transaction {
+  label {
+    color: $dark !important;
+  }
+}
+
+.message {
+  font-size: 12px;
+  margin-top: 26px;
+}
+</style>

@@ -1,45 +1,92 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-    <a class="navbar-brand" href="#">DeepChain</a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-toggle="collapse"
-      data-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        <!-- <li class="nav-item active">
-        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Dropdown
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Something else here</a>
+  <nav>
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <div class="nav">
+            <p class="logo">DeepChain</p>
+            <div class="walletConnect">
+              <div class="indicator"></div>
+              <span v-on:click="walletDetector">Connect wallet</span>
+            </div>
+          </div>
         </div>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link disabled" href="#">Disabled</a>
-      </li> -->
-      </ul>
-      <!-- <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form> -->
+      </div>
     </div>
   </nav>
 </template>
+
+<script>
+export default {
+  name: "Navbar",
+  methods: {
+    walletDetector: async function () {
+      if (typeof window.ethereum !== "undefined") {
+        console.log("MetaMask is installed!");
+      }
+      this.metamask_account = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
+
+      try {
+        console.log(window.ethereum.isMetaMask);
+        alert("metamask connected");
+        this.$store.commit("setAccount", `${window.ethereum.selectedAddress}`);
+      } catch (error) {
+        console.log("not present", error);
+        alert("Unable to find or connect with Metamask");
+      }
+    },
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+$dark: #231f20;
+$light: #fefefe;
+$light2: #efefef;
+$theme: #ff5000;
+
+.nav {
+  height: 80px;
+  border-bottom: 1px solid $light;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  z-index: 10;
+  color: $light;
+}
+
+.logo {
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 78px;
+}
+
+.indicator {
+  height: 9px;
+  width: 9px;
+  border-radius: 5px;
+  margin-right: 10px;
+  background-color: red;
+}
+
+.walletConnect {
+  height: 32px;
+  line-height: 32px;
+  padding: 0 14px;
+  border: 1px solid $light;
+  border-radius: 16px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  margin-top: 23px;
+  cursor: pointer;
+  color: $light;
+
+  &:hover {
+    background-color: white;
+    color: $dark;
+  }
+}
+</style>
