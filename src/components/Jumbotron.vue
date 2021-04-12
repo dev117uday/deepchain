@@ -12,8 +12,8 @@
           <img src="@/assets/chain-new.png" class="logo" />
         </div>
       </div>
-      <div class="parallax-image-container">
-        <img src="@/assets/bgImg.png" class="parallax-img" />
+      <div class="parallax-image-container" ref="parallaxImgContainer">
+        <img src="@/assets/bgImg3.png" class="parallax-img" ref="parallaxImg" />
       </div>
     </div>
 
@@ -30,6 +30,8 @@
               <span><span ref="tag5">using </span></span>
               <span><span ref="tag6">blockchain</span></span>
             </p>
+
+            <!-- <ModelGltf /> -->
           </div>
 
           <div class="col-6">
@@ -64,10 +66,14 @@
 <script>
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+// import ModelGltf from "@/components/ModelGltf.vue";
 gsap.registerPlugin(ScrollTrigger);
 
 export default {
   name: "Jumbotron" /* I don't even know what jumbotron means */,
+  // components: {
+  //   ModelGltf,
+  // },
 
   mounted() {
     var tl = gsap.timeline({
@@ -77,7 +83,7 @@ export default {
         transform: "translateY(0) skewY(0deg)",
         scrollTrigger: this.$refs.info,
         toggleActions: "play complete reverse reset",
-        start: "center center"
+        start: "center center",
       },
     });
 
@@ -87,6 +93,24 @@ export default {
       .to(this.$refs.tag4, {})
       .to(this.$refs.tag5, {})
       .to(this.$refs.tag6, {});
+
+    // for hero image parallax
+    gsap
+      .timeline({
+        scrollTrigger: {
+          trigger: this.$refs.parallaxImgContainer,
+          // start: "top top",
+          // start: "bottom bottom",
+          // end: "top top",
+          toggleActions: "play none none reverse",
+          scrub: true,
+        },
+      })
+      .fromTo(
+        this.$refs.parallaxImg,
+        { yPercent: 10, ease: "none" },
+        { yPercent: -30, ease: "none" }
+      );
   },
 };
 </script>
@@ -104,19 +128,24 @@ $theme: #ff5000;
 
 .dark-section {
   background-color: $dark;
+  overflow: hidden;
+  height: 660px;
+  margin-top: -80px;
 
   .parallax-image-container {
     position: absolute;
     top: 0;
     left: 0;
-    height: 100%;
+    height: 106%;
     width: 100%;
-    opacity: 0.07;
+    opacity: 0.6;
+    overflow: hidden;
     // z-index: -1;
 
     img {
       width: 100%;
-      height: 100%;
+      height: 140%;
+      object-fit: cover;
     }
   }
 }
@@ -126,8 +155,6 @@ $theme: #ff5000;
   flex-direction: column;
   justify-content: center;
   position: relative;
-  margin-top: -80px;
-  padding-top: 40px;
   z-index: 1;
 }
 
@@ -151,7 +178,9 @@ $theme: #ff5000;
     color: $light;
 
     &:hover {
-      background-color: #d64501;
+      border: 1.5px solid white;
+      color: $theme;
+      background-color: white;
     }
   }
 
@@ -161,8 +190,9 @@ $theme: #ff5000;
     border-color: $light;
 
     &:hover {
-      background-color: #d64501;
-      color: $light;
+      background: white;
+      color: $theme;
+      border-color: white;
     }
   }
 }

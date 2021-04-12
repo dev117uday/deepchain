@@ -68,7 +68,8 @@ export default {
   position: fixed;
   top: 0;
   left: 0;
-  background-color: #14121f;
+  // background-color: #14121f;
+  background-color: #231f20;
   z-index: 11;
   color: #fefff5;
 

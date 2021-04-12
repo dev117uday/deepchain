@@ -14,7 +14,7 @@
               <div class="col-12">
                 <h2>Configure IPFS yourself</h2>
               </div>
-              <div class="col-6">
+              <div class="col-6" ref="leftForm1">
                 <div v-if="!toggle_switch">
                   <h3>Connect to IPFS using Pinata</h3>
                   <form>
@@ -73,7 +73,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-6">
+              <div class="col-6" ref="leftForm2">
                 <div v-if="!toggle_switch">
                   <h3>Upload File</h3>
 
@@ -195,7 +195,7 @@
             <div class="inputContainer">
               <input type="text" id="send-to" v-model="addressTo" />
               <label for="send-to"
-                >Address (send to) : (set to default address)</label
+                >Address (send to) : <span>(set to default address)</span></label
               >
             </div>
           </div>
@@ -255,9 +255,37 @@ export default {
   methods: {
     toggle_switchx: function (i) {
       if (i == 1) {
+        // trigger animation
+        gsap
+          .timeline({ defaults: { duration: 0.3 } })
+          .fromTo(
+            this.$refs.leftForm1,
+            { opacity: 0, x: "-20px" },
+            { opacity: 1, x: 0, delay: 0.4 }
+          )
+          .fromTo(
+            this.$refs.leftForm2,
+            { opacity: 0, x: "-20px" },
+            { opacity: 1, x: 0 }
+          );
+
         this.toggle_switch = false;
       } else {
-        this.toggle_switch = true;
+        gsap
+          .timeline({ defaults: { duration: 0.3 } })
+          .fromTo(
+            this.$refs.leftForm2,
+            { opacity: 1, x: 0 },
+            { opacity: 0, x: "-20px" }
+          )
+          .fromTo(
+            this.$refs.leftForm1,
+            { opacity: 1, x: 0 },
+            { opacity: 0, x: "-20px" }
+          );
+        setTimeout(() => {
+          this.toggle_switch = true;
+        }, 600);
       }
     },
     handleFilesUpload() {
@@ -436,7 +464,7 @@ export default {
 </script>
 
 <style lang="scss">
-$transition: 0.4s cubic-bezier(0.36, 0.33, 0, 1);
+$transition: 0.6s cubic-bezier(0.36, 0.33, 0, 1);
 // $theme: #ff4d00;
 // $theme: #fc5811;
 // $dark: #14121f;
@@ -480,6 +508,8 @@ $rightTextColor: $dark;
     font-size: 30px;
     font-weight: bold;
     margin-bottom: 50px;
+    // text-overflow: nowrap;
+    white-space: nowrap;
   }
 
   h3 {
@@ -493,6 +523,21 @@ $rightTextColor: $dark;
     background-color: $leftBgColor;
     // background-color: red;
     padding-left: 0;
+
+    &:after {
+      height: 100%;
+      width: 40px;
+      background: linear-gradient(
+        90deg,
+        rgba(35, 31, 32, 0) 0%,
+        rgba(35, 31, 32, 0.5) 18.75%,
+        #231f20 43.75%
+      );
+      content: "";
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
 
     h2,
     h3 {
@@ -604,6 +649,8 @@ $rightTextColor: $dark;
     transition: all 0.3s ease;
     // user-select: none;
     // pointer-events: none;
+
+    span{font-size: 12px; font-weight: 400; font-style: italic}
   }
 }
 
@@ -713,6 +760,7 @@ $rightTextColor: $dark;
 }
 
 .final-transaction {
+  padding: 60px 0;
   label {
     color: $dark !important;
   }

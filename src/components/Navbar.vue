@@ -5,9 +5,15 @@
         <div class="col-12">
           <div class="nav">
             <p class="logo">DeepChain</p>
-            <div class="walletConnect">
+            <div
+              class="walletConnect"
+              :class="[wallet_connected ? 'connected' : 'disconnected']"
+            >
               <div class="indicator"></div>
-              <span v-on:click="walletDetector">Connect wallet</span>
+              <span v-on:click="walletDetector">
+                <span v-if="!wallet_connected">Connect Wallet</span>
+                <span v-if="wallet_connected">Wallet Connected</span>
+              </span>
             </div>
           </div>
         </div>
@@ -37,6 +43,11 @@ export default {
         alert("Unable to find or connect with Metamask");
       }
     },
+  },
+  data() {
+    return {
+      wallet_connected: true,
+    };
   },
 };
 </script>
@@ -68,7 +79,6 @@ $theme: #ff5000;
   width: 9px;
   border-radius: 5px;
   margin-right: 10px;
-  background-color: red;
 }
 
 .walletConnect {
@@ -84,8 +94,23 @@ $theme: #ff5000;
   cursor: pointer;
   color: $light;
 
-  &:hover {
+  &.connected {
+    .indicator {
+      background-color: green;
+    }
+  }
+
+  &.disconnected {
+    .indicator {
+      background-color: red;
+    }
+
     background-color: white;
+    color: black;
+  }
+
+  &:hover {
+    background-color: #f1f1f1;
     color: $dark;
   }
 }
