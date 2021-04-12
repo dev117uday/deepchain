@@ -195,7 +195,7 @@
             <div class="inputContainer">
               <input type="text" id="send-to" v-model="addressTo" />
               <label for="send-to"
-                >Address (send to) : (set to default address)</label
+                >Address (send to) : <span>(set to default address)</span></label
               >
             </div>
           </div>
@@ -649,6 +649,8 @@ $rightTextColor: $dark;
     transition: all 0.3s ease;
     // user-select: none;
     // pointer-events: none;
+
+    span{font-size: 12px; font-weight: 400; font-style: italic}
   }
 }
 

@@ -30,8 +30,8 @@
               <span><span ref="tag5">using </span></span>
               <span><span ref="tag6">blockchain</span></span>
             </p>
-            
-            <ModelEthereum />
+
+            <!-- <ModelGltf /> -->
           </div>
 
           <div class="col-6">
@@ -66,14 +66,14 @@
 <script>
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import ModelEthereum from "@/components/EthereumModel.vue";
+// import ModelGltf from "@/components/ModelGltf.vue";
 gsap.registerPlugin(ScrollTrigger);
 
 export default {
   name: "Jumbotron" /* I don't even know what jumbotron means */,
-  components: {
-    ModelEthereum
-  },
+  // components: {
+  //   ModelGltf,
+  // },
 
   mounted() {
     var tl = gsap.timeline({
@@ -128,6 +128,9 @@ $theme: #ff5000;
 
 .dark-section {
   background-color: $dark;
+  overflow: hidden;
+  height: 660px;
+  margin-top: -80px;
 
   .parallax-image-container {
     position: absolute;
@@ -152,8 +155,6 @@ $theme: #ff5000;
   flex-direction: column;
   justify-content: center;
   position: relative;
-  margin-top: -80px;
-  padding-top: 40px;
   z-index: 1;
 }
 
