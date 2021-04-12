@@ -758,6 +758,7 @@ $rightTextColor: $dark;
 }
 
 .final-transaction {
+  padding: 60px 0;
   label {
     color: $dark !important;
   }
