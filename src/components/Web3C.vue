@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="splitForm">
     <!-- IPFS -->
 
     <div class="split-form" ref="splitForm">
@@ -490,10 +490,10 @@ $rightTextColor: $dark;
 
 .partition {
   width: 30%;
-  height: 600px;
+  height: 650px;
   display: inline-flex;
   flex-direction: column;
-  padding: 60px 40px;
+  padding: 80px 40px;
   float: left;
   margin-bottom: 100px;
   transition: $transition;
@@ -547,7 +547,6 @@ $rightTextColor: $dark;
 
   &.right {
     background-color: $rightBgColor;
-    // background-color: blue;
     padding-right: 0;
 
     h2,
@@ -579,6 +578,25 @@ $rightTextColor: $dark;
         width: 68%;
       }
     }
+  }
+}
+
+// to give the split screen effect
+
+.split-form {
+  // background-color: #8b87a7;
+  background-color: $rightBgColor;
+  height: 650px;
+  position: relative;
+
+  &:after {
+    content: "";
+    position: absolute;
+    width: 50%;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background-color: $leftBgColor;
   }
 }
 
@@ -739,23 +757,6 @@ $rightTextColor: $dark;
       text-decoration: underline;
       cursor: pointer;
     }
-  }
-}
-
-.split-form {
-  // background-color: #8b87a7;
-  background-color: $rightBgColor;
-  height: 600px;
-  position: relative;
-
-  &:after {
-    content: "";
-    position: absolute;
-    width: 50%;
-    left: 0;
-    top: 0;
-    height: 100%;
-    background-color: $leftBgColor;
   }
 }
 
