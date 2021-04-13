@@ -25,30 +25,34 @@
 <script>
 export default {
   name: "Navbar",
+  data() {
+    return {
+      wallet_connected: false,
+    };
+  },
   methods: {
     walletDetector: async function () {
       if (typeof window.ethereum !== "undefined") {
         console.log("MetaMask is installed!");
-      }
+        this.wallet_connected = false
+      } 
       this.metamask_account = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
 
       try {
         console.log(window.ethereum.isMetaMask);
-        alert("metamask connected");
+        this.wallet_connected = true
         this.$store.commit("setAccount", `${window.ethereum.selectedAddress}`);
+        
       } catch (error) {
+        this.wallet_connected = false
         console.log("not present", error);
         alert("Unable to find or connect with Metamask");
       }
     },
   },
-  data() {
-    return {
-      wallet_connected: true,
-    };
-  },
+  
 };
 </script>
 
