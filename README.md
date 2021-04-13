@@ -1,6 +1,6 @@
 # DeepChain &middot; ![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-green.svg)](README.md)
 
-![Cover Image](./src/assets/gh-cover.png)
+![Cover Image](./src/assets/gh-cover-new.png)
 
 ## The problem DeepChain solves
 With the rise in social media and the ever-increasing demand for it, there remains no single source of news.
