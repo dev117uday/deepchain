@@ -24,9 +24,8 @@ As a part of our plan, the smart contract that we perform the transaction to, th
 ## Technologies we used
 Metamask, Fleek, IPFS, Pinata, Vue, GSAP, SCSS
 
-
 ## Run the project
-Run the `yarn install` command in the terminal to download the dependencies.   
+Run the `npm install` command in the terminal to download the dependencies.   
 Run the `npm run serve` command to run the vue project in the development mode. 
 
 Open http://localhost:8080 to view it in the browser.
