@@ -6,8 +6,8 @@
         <div class="hero" style="position: relative">
           <h2 class="title">Project DeepChain</h2>
           <div class="btn-container">
-            <div class="btn btn-filled">Perfrom transaction</div>
-            <div class="btn btn-hollow">Know more</div>
+            <a href="#splitForm" class="btn btn-filled">Perfrom transaction</a>
+            <a href="#info" class="btn btn-hollow">Know more</a>
           </div>
           <img src="@/assets/chain-new.png" class="logo" />
         </div>
@@ -18,7 +18,7 @@
     </div>
 
     <!-- info section -->
-    <div class="info" ref="info">
+    <div class="info" ref="info" id="info">
       <div class="container">
         <div class="row">
           <div class="col-6">
@@ -131,6 +131,7 @@ $theme: #ff5000;
   overflow: hidden;
   height: 660px;
   margin-top: -80px;
+  position:relative;
 
   .parallax-image-container {
     position: absolute;
