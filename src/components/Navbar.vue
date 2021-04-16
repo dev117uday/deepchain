@@ -5,6 +5,7 @@
         <div class="col-12">
           <div class="nav">
             <p class="logo">DeepChain</p>
+            <div v-on:click="discover" class="walletConnect">Discover Page</div>
             <div
               class="walletConnect"
               :class="[wallet_connected ? 'connected' : 'disconnected']"
@@ -34,25 +35,26 @@ export default {
     walletDetector: async function () {
       if (typeof window.ethereum !== "undefined") {
         console.log("MetaMask is installed!");
-        this.wallet_connected = false
-      } 
+        this.wallet_connected = false;
+      }
       this.metamask_account = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
 
       try {
         console.log(window.ethereum.isMetaMask);
-        this.wallet_connected = true
+        this.wallet_connected = true;
         this.$store.commit("setAccount", `${window.ethereum.selectedAddress}`);
-        
       } catch (error) {
-        this.wallet_connected = false
+        this.wallet_connected = false;
         console.log("not present", error);
         alert("Unable to find or connect with Metamask");
       }
     },
+    discover: function () {
+      window.location.href = "/discover";
+    },
   },
-  
 };
 </script>
 

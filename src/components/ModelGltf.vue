@@ -16,6 +16,6 @@ export default {
 <style lang="scss" scoped>
 .model-container {
   height: 500px;
-  border:1px solid red;
+  border: 1px solid red;
 }
 </style>

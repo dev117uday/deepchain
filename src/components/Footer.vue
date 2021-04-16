@@ -67,11 +67,11 @@ $theme: #ff5000;
   }
 }
 
-.content-container{
-    display:flex; 
-    flex-direction: column;
-    justify-content: center;
-    height: 100%;
+.content-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
 }
 
 .eif-logo {

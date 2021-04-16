@@ -47,13 +47,10 @@
             <section class="steps">
               <h2>Steps to perform transaction</h2>
               <ul>
-                <li>Setup Pinata or Provide IPFS CID</li>
-                <li>Connect this app with MetaMask</li>
-                <li>
-                  Set Address to send (this is done in-order to perform a
-                  transaction)
-                </li>
-                <li>Approve transaction on MetaMask</li>
+                <li>1. Setup Pinata or Provide IPFS CID</li>
+                <li>2. Connect this app with MetaMask</li>
+                <li>3. Click Stamp Data File</li>
+                <li>4. Approve transaction on MetaMask</li>
               </ul>
             </section>
           </div>
@@ -131,7 +128,7 @@ $theme: #ff5000;
   overflow: hidden;
   height: 660px;
   margin-top: -80px;
-  position:relative;
+  position: relative;
 
   .parallax-image-container {
     position: absolute;

@@ -181,23 +181,26 @@
       <div class="container">
         <div class="row">
           <div class="col-12"><h3>Confirm Final Transaction</h3></div>
-          <div class="col-6">
+          <div class="col-sm-6">
             <div class="inputContainer">
-              <input type="text" id="ipfs-cid" v-model="ipfsHash" />
-              <label for="ipfs-cid">IPFS CID</label>
+              <h4 for="ipfs-cid">IPFS CID</h4>
+              <p>{{ ipfsHash }}</p>
             </div>
-            <p class="message">Address (sending from) : {{ getAddress }}</p>
+            <br />
             <button class="btn blackText" v-on:click="performTransaction">
               Stamp Data File on Blockchain
             </button>
           </div>
-          <div class="col-6">
+          <div class="col-sm-6">
             <div class="inputContainer">
-              <input type="text" id="send-to" v-model="addressTo" />
               <label for="send-to"
-                >Address (send to) : <span>(set to default address)</span></label
+                >Address (send to) : DeepChain Smart Contract<br />
+                <span>At : {{ addressTo }}</span> <br />
+                Address (send from) : Your Address <br />
+                <span>from : {{ getAddress }}</span></label
               >
             </div>
+            <br />
           </div>
         </div>
         <br /><br />
@@ -246,7 +249,7 @@ export default {
       file: null,
       ipfsHash: "",
       metamask_account: "",
-      addressTo: "0x7e1a31293b444BB16E9f770DA9C71eb2bA7Bb6b3",
+      addressTo: "0x3851662e9f0A6c42636B72b8f392345cd29F9780",
       addressFrom: "-",
       file_selected: "",
       txhash: "",
@@ -373,9 +376,10 @@ export default {
       if (this.ipfsHash == "") {
         alert("IPFS CID missing");
         return;
-      } else if (this.addressFrom == "-") {
-        alert("Please connect to MetaMask");
       }
+      // else if (this.addressFrom == "-") {
+      //   alert("Please connect to MetaMask");
+      // }
 
       console.log(this.$store.state.account);
 
@@ -384,6 +388,7 @@ export default {
         gasPrice: "400",
         from: window.ethereum.selectedAddress,
         to: this.addressTo,
+        value: Web3.utils.toWei("0", "ether"),
         data: Web3.utils.utf8ToHex(this.ipfsHash),
       };
 
@@ -397,7 +402,16 @@ export default {
           this.connect_final_s = true;
           this.connect_final_f = false;
           this.connection_msg_final = "txhash : " + txHash;
-          this.send_data();
+
+          let { contract } = require("../contract.js");
+          let web3 = new Web3("https://rpc.slock.it/goerli");
+          var sc = new web3.eth.Contract(contract.contract, contract.address);
+          sc.methods
+            .receivedTx(this.txhash)
+            .call({ from: this.getAddress })
+            .then(function (receipt) {
+              console.log(receipt);
+            });
         })
         .catch((error) => {
           this.connect_final_s = false;
@@ -405,61 +419,16 @@ export default {
           this.connection_msg_final = error.message;
         });
     },
-    send_data: function () {
-      console.log("click");
-
-      var data = JSON.stringify({
-        ipfs_cid: this.ipfsHash,
-        address_to: this.addressTo,
-        address_from: this.addressTo,
-        txhash: this.txhash,
-      });
-
-      var config = {
-        method: "post",
-        url: "http://127.0.0.1:3000/savetx",
-        headers: {
-          Accept: "application/javascript",
-          "Content-Type": "application/json",
-        },
-        data: data,
-      };
-
-      axios(config)
-        .then(function (response) {
-          console.log(JSON.stringify(response.data));
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-    },
   },
   computed: {
     getAddress: function () {
-      return this.$store.state.account;
+      let account = this.$store.state.account;
+      if (account == "") {
+        return "";
+      }
+      return account;
     },
   },
-  // mounted() {
-  //   var tl2 = gsap.timeline({
-  //     duration: 0.3,
-  //     scrollTrigger: {
-  //       trigger: this.$refs.splitForm,
-  //       toggleActions: "play complete reverse reset",
-  //       start: "top bottom",
-  //       end: "top 100px",
-  //     },
-  //   });
-
-  //   tl2
-  //     .fromTo(this.$refs.rightPartition, { width: "65%" }, { width: "70%" })
-  //     .fromTo(
-  //       this.$refs.leftPartition,
-  //       { width: "35%" },
-  //       {
-  //         width: "30%"
-  //       }
-  //     );
-  // },
 };
 </script>
 
@@ -668,7 +637,11 @@ $rightTextColor: $dark;
     // user-select: none;
     // pointer-events: none;
 
-    span{font-size: 12px; font-weight: 400; font-style: italic}
+    span {
+      font-size: 12px;
+      font-weight: 400;
+      font-style: italic;
+    }
   }
 }
 

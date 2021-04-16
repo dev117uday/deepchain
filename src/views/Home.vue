@@ -22,7 +22,7 @@ export default {
 </script>
 
 <style>
-html{
+html {
   scroll-behavior: smooth;
 }
 body {

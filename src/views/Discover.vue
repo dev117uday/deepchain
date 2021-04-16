@@ -1,9 +1,13 @@
 <template>
   <div class="about">
-    <NavBar />
+
     <div class="jumbotron">
       <h4>Discover everything that has been happening on Deepchain</h4>
-      <button class="btn btn-primary" v-on:click="fetchdata">Get Data</button>
+      <button class="btn btn-primary" v-on:click="loadContract">Get Data</button>
+      &nbsp;
+      <button class="btn btn-primary" v-on:click="mainpage">
+        Back To Main Page
+      </button>
     </div>
     <div class="container mt-3">
       <br />
@@ -50,7 +54,9 @@
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <div class="modal-body"><img :src="img" class="img-fluid" /></div>
+            <div class="modal-body">
+              <img :src="img" class="img-fluid" />
+            </div>
             <div class="modal-footer">
               <button
                 type="button"
@@ -68,13 +74,12 @@
 </template>
 
 <script>
-var axios = require("axios");
-import NavBar from "@/components/Navbar.vue";
+import Web3 from "web3";
+const web3 = new Web3("https://rpc.slock.it/goerli");
+console.log(web3.currentProvider.connected);
+
 export default {
   name: "Home",
-  components: {
-    NavBar,
-  },
   data() {
     return {
       discover_data: [],
@@ -83,28 +88,26 @@ export default {
     };
   },
   methods: {
-    fetchdata: function () {
-      this.discover_data = [];
-      var config = {
-        method: "get",
-        url: "http://localhost:3000/gettx",
-        headers: {},
-      };
-
-      axios(config)
-        .then((response) => {
-          response.data.map((d) => {
-            this.discover_data.push(d);
-          });
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-      return "";
-    },
+    
     getImgUrl: function (ipfs_cid) {
       this.img = ipfs_cid;
       return ipfs_cid;
+    },
+    mainpage: function () {
+      window.location.href = "/";
+    },
+    loadContract: async function () {
+      let { contract } = require("../contract.js");
+
+      var sc = new web3.eth.Contract(contract.contract, contract.address);
+      await sc.getPastEvents(
+        "Received",
+        { fromBlock: (await web3.eth.getBlockNumber()) - 20000, toBlock: "latest" },
+        (err, event) => {
+          console.log(event);
+          console.log(err);
+        }
+      );
     },
   },
 };

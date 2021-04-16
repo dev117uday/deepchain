@@ -23,7 +23,7 @@ export default {
     Jumbotron,
     Navbar,
     Web3C,
-    Footer
+    Footer,
   },
 };
 </script>
