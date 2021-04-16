@@ -1,34 +1,27 @@
 <template>
   <div class="about">
-
     <div class="jumbotron">
       <h4>Discover everything that has been happening on Deepchain</h4>
-      <button class="btn btn-primary" v-on:click="loadContract">Get Data</button>
+      <button class="btn btn-primary" v-on:click="loadContract">
+        Get Data
+      </button>
       &nbsp;
       <button class="btn btn-primary" v-on:click="mainpage">
         Back To Main Page
       </button>
     </div>
-    <div class="container mt-3">
+    <div class="container">
       <br />
       <br />
-      <ul class="list-group" v-for="item in discover_data" :key="item.id">
-        <li class="list-group-item">
-          IPFS CID : {{ item.ipfs_cid }}
-          <button
-            type="button"
-            class="btn btn-primary"
-            data-toggle="modal"
-            data-target="#exampleModal"
-            v-on:click="getImgUrl(item.ipfs_cid)"
-          >
-            See
-          </button>
+      <ul
+        class="list-group"
+        v-for="item in discover_data"
+        :key="item.transactionHash"
+      >
+        <li>
+          Tx : {{ item.transactionHash }} <br />
+          - Data : {{ item.input }}
         </li>
-        <li class="list-group-item">Address to : {{ item.address_to }}</li>
-        <li class="list-group-item">Address from : {{ item.address_from }}</li>
-        <li class="list-group-item">Item : {{ item.txhash }}</li>
-        <br />
       </ul>
       <!-- Button trigger modal -->
 
@@ -88,7 +81,6 @@ export default {
     };
   },
   methods: {
-    
     getImgUrl: function (ipfs_cid) {
       this.img = ipfs_cid;
       return ipfs_cid;
@@ -102,9 +94,19 @@ export default {
       var sc = new web3.eth.Contract(contract.contract, contract.address);
       await sc.getPastEvents(
         "Received",
-        { fromBlock: (await web3.eth.getBlockNumber()) - 20000, toBlock: "latest" },
+        {
+          fromBlock: (await web3.eth.getBlockNumber()) - 20000,
+          toBlock: "latest",
+        },
         (err, event) => {
-          console.log(event);
+          event.map(async (data) => {
+            let dataObject = [];
+            dataObject["transactionHash"] = data.transactionHash;
+            await web3.eth.getTransaction(data.transactionHash).then((x) => {
+              dataObject["input"] = Web3.utils.hexToUtf8(x.input);
+            });
+            this.discover_data.push(dataObject);
+          });
           console.log(err);
         }
       );
